@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Input, Chip } from '@material-tailwind/react';
+import { Input, Chip } from '@material-tailwind/react';
 
 const ModuleCalculatorPreview = () => {
   const [tjm, setTjm] = useState('');
@@ -50,7 +50,7 @@ const ModuleCalculatorPreview = () => {
   };
 
   return (
-    <Card className="w-full h-full p-4">
+    <div className="w-full h-full pt-2">
       <div className="mb-4">
         <Input
           label="TJM"
@@ -69,7 +69,7 @@ const ModuleCalculatorPreview = () => {
           value={days}
         />
       </div>
-      <div className="flex flex-col gap-1 justify-between">
+      <div className="flex flex-col gap-4 justify-between">
         <Chip
           value={
             calculateAnnualIncome().toLocaleString('fr-FR', {
@@ -98,7 +98,7 @@ const ModuleCalculatorPreview = () => {
           variant="outlined"
         />
       </div>
-    </Card>
+    </div>
   );
 };
 

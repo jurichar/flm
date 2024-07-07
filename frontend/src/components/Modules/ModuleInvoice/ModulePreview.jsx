@@ -1,10 +1,4 @@
-import {
-  Card,
-  List,
-  ListItem,
-  Typography,
-  Chip,
-} from '@material-tailwind/react';
+import { List, ListItem, Typography, Chip } from '@material-tailwind/react';
 
 const ModuleInvoicePreview = () => {
   const invoices = [
@@ -14,7 +8,7 @@ const ModuleInvoicePreview = () => {
   ];
 
   return (
-    <Card className="w-full h-full p-4 overflow-scroll">
+    <div className="w-full h-full overflow-scroll">
       {invoices.length > 0 ? (
         <List>
           {invoices.map((invoice) => (
@@ -44,7 +38,7 @@ const ModuleInvoicePreview = () => {
           Aucune facture disponible.
         </Typography>
       )}
-    </Card>
+    </div>
   );
 };
 

@@ -1,10 +1,4 @@
-import {
-  Card,
-  List,
-  ListItem,
-  Typography,
-  Chip,
-} from '@material-tailwind/react';
+import { List, ListItem, Typography, Chip } from '@material-tailwind/react';
 
 const ModuleEstimatePreview = () => {
   const estimates = [
@@ -14,7 +8,7 @@ const ModuleEstimatePreview = () => {
   ];
 
   return (
-    <Card className="w-full h-full p-4 overflow-scroll">
+    <div className="w-full h-full overflow-scroll">
       {estimates.length > 0 ? (
         <List>
           {estimates.map((estimate) => (
@@ -44,7 +38,7 @@ const ModuleEstimatePreview = () => {
           Aucun devis disponible.
         </Typography>
       )}
-    </Card>
+    </div>
   );
 };
 
