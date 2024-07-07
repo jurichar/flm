@@ -1,0 +1,10 @@
+{
+  "welcome": "Bienvenue",
+  "settings": "Paramètres",
+  "login": {
+    "title": "Connexion",
+    "email": "Email",
+    "password": "Mot de passe",
+    "signin": "Se connecter"
+  }
+}

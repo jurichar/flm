@@ -1,0 +1,59 @@
+services:
+  db:
+    container_name: postgres
+    image: postgres:16.1
+    ports:
+      - '5432:5432'
+
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+
+    volumes:
+      - ./data/db:/var/lib/postgresql/data/
+
+  frontend:
+
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    environment :
+      - FONTAWESOME_PACKAGE_TOKEN=${FONTAWESOME_PACKAGE_TOKEN}
+
+    ports:
+      - '3000:3000'
+
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+
+    command: >
+          sh -c "
+          yarn set version 4.3.1 &&
+          yarn install &&
+          yarn fix
+          "
+
+    depends_on:
+      - backend
+
+  backend: 
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+
+    ports:
+      - '8000:8000'
+
+    volumes:
+      - ./backend:/app/backend
+
+    depends_on:
+      - db
