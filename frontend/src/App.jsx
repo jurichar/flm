@@ -9,7 +9,7 @@ import ModulePage from './pages/ModulePage';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userModules] = useState(['Invoice', 'Estimate', 'Calculator']);
+  const [userModules] = useState(['Calculator', 'Estimate', 'Invoice']);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -57,10 +57,6 @@ const App = () => {
               }
               path="/module/:moduleName"
             />
-            {/* <Route path="/branches" component={BranchesPage} /> */}
-            {/* <Route path="/modules" component={ModulePage} /> */}
-            {/* <Route path="/settings" component={SettingsPage} /> */}
-            {/* Add more routes as needed */}
           </Routes>
         </div>
       </Router>
