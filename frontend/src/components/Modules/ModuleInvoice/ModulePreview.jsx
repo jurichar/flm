@@ -6,11 +6,11 @@ import {
   Chip,
 } from '@material-tailwind/react';
 
-const ModuleACQPreview = () => {
+const ModuleInvoicePreview = () => {
   const invoices = [
     { id: 1, name: 'Invoice 1', amount: '50€', sent: 'true', sign: 'true' },
-    { id: 2, name: 'Invoice 2', amount: '200€', sent: 'true', sign: 'false' },
-    { id: 3, name: 'Invoice 2', amount: '200€', sent: 'false', sign: 'false' },
+    { id: 2, name: 'Invoice 2', amount: '1600€', sent: 'false', sign: 'false' },
+    { id: 3, name: 'Invoice 2', amount: '6400€', sent: 'false', sign: 'false' },
   ];
 
   return (
@@ -29,7 +29,7 @@ const ModuleACQPreview = () => {
               </div>
               <div className="flex gap-2">
                 {invoice.sign === 'true' ? (
-                  <Chip value="Signé" />
+                  <Chip value="Payé" />
                 ) : invoice.sent === 'true' ? (
                   <Chip value="Envoyé" />
                 ) : (
@@ -48,4 +48,4 @@ const ModuleACQPreview = () => {
   );
 };
 
-export default ModuleACQPreview;
+export default ModuleInvoicePreview;
