@@ -5,8 +5,10 @@ import modulePreviews from '../../../utils/modulePreviews';
 const ModuleCard = ({ moduleName, hasAccess }) => {
   const navigate = useNavigate();
 
-  const handleCardClick = () => {
-    navigate(`/module/${moduleName}`);
+  const handleCardClick = (event) => {
+    if (event.target.tagName !== 'INPUT') {
+      navigate(`/module/${moduleName}`);
+    }
   };
 
   const PreviewComponent = modulePreviews[moduleName];

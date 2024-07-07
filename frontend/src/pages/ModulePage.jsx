@@ -1,10 +1,12 @@
 import { useParams, Navigate } from 'react-router-dom';
 import ModuleInvoice from '../components/Modules/ModuleInvoice/Module';
 import ModuleEstimate from '../components/Modules/ModuleEstimate/Module';
+import ModuleCalculator from '../components/Modules/ModuleCalculator/Module';
 
 const modulesMap = {
   Invoice: ModuleInvoice,
   Estimate: ModuleEstimate,
+  Calculator: ModuleCalculator,
 };
 
 const ModulePage = ({ hasAccess }) => {

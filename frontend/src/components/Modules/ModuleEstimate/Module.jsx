@@ -90,7 +90,7 @@ const chartConfig = {
   },
 };
 
-const ModuleACQ = () => {
+const ModuleEstimate = () => {
   return (
     <Card>
       <Chart {...chartConfig} />
@@ -98,4 +98,4 @@ const ModuleACQ = () => {
   );
 };
 
-export default ModuleACQ;
+export default ModuleEstimate;
