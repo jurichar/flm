@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Input, Typography, Chip } from '@material-tailwind/react';
+import { Input, Typography, Chip } from '@material-tailwind/react';
 
 const ModuleCalculator = () => {
   const [tjm, setTjm] = useState('');
@@ -50,7 +50,7 @@ const ModuleCalculator = () => {
   };
 
   return (
-    <Card className="w-full h-full p-4">
+    <div className="w-full h-full p-4">
       <div className="mb-4">
         <Input
           label="TJM"
@@ -70,7 +70,9 @@ const ModuleCalculator = () => {
         />
       </div>
       <Typography color="blue-gray" variant="h6">
-        CA:{' '}
+        Chiffre d&apos;affaire:{' '}
+      </Typography>
+      <Typography color="blue-gray" variant="h6">
         {calculateRevenue().toLocaleString('fr-FR', {
           style: 'currency',
           currency: 'EUR',
@@ -78,19 +80,23 @@ const ModuleCalculator = () => {
       </Typography>
       <Typography color="blue-gray" variant="h6">
         Revenu post URSSAF:{' '}
+      </Typography>
+      <Typography color="blue-gray" variant="h6">
         {calculateAfterUrssaf().toLocaleString('fr-FR', {
           style: 'currency',
           currency: 'EUR',
         })}
       </Typography>
       <Typography color="blue-gray" variant="h6">
-        Revenu net:&apos;{' '}
+        Revenu net:{' '}
+      </Typography>
+      <Typography color="blue-gray" variant="h6">
         {calculateNetIncome().toLocaleString('fr-FR', {
           style: 'currency',
           currency: 'EUR',
         })}
       </Typography>
-      <div className="flex justify-between mt-4">
+      <div className="flex flex-col gap-4 justify-between mt-4">
         <Chip
           value={
             calculateAnnualIncome().toLocaleString('fr-FR', {
@@ -119,7 +125,7 @@ const ModuleCalculator = () => {
           variant="outlined"
         />
       </div>
-    </Card>
+    </div>
   );
 };
 
