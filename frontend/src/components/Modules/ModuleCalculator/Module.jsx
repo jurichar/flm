@@ -51,6 +51,12 @@ const ModuleCalculator = () => {
 
   return (
     <div className="w-full h-full p-4">
+      <div>
+        <Typography color="blue-gray" variant="h4">
+          Calculateur de revenus:
+        </Typography>
+        <switchButton />
+      </div>
       <div className="mb-4">
         <Input
           label="TJM"
