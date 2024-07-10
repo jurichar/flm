@@ -4,7 +4,7 @@ const ModuleInvoicePreview = () => {
   const invoices = [
     { id: 1, name: 'Invoice 1', amount: '50€', sent: 'true', sign: 'true' },
     { id: 2, name: 'Invoice 2', amount: '1600€', sent: 'false', sign: 'false' },
-    { id: 3, name: 'Invoice 2', amount: '6400€', sent: 'false', sign: 'false' },
+    { id: 3, name: 'Invoice 2', amount: '5200€', sent: 'false', sign: 'false' },
   ];
 
   return (

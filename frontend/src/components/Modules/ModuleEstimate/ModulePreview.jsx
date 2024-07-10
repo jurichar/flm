@@ -4,7 +4,7 @@ const ModuleEstimatePreview = () => {
   const estimates = [
     { id: 1, name: 'Estimate 1', amount: '50€', sent: 'true', sign: 'true' },
     { id: 2, name: 'Estimate 2', amount: '1600€', sent: 'true', sign: 'false' },
-    { id: 3, name: 'Estimate 2', amount: '6400€', sent: 'true', sign: 'false' },
+    { id: 3, name: 'Estimate 2', amount: '5200€', sent: 'true', sign: 'true' },
   ];
 
   return (

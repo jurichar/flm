@@ -14,12 +14,11 @@ services:
       - ./data/db:/var/lib/postgresql/data/
 
   frontend:
-
     build:
       context: ./frontend
       dockerfile: Dockerfile
 
-    environment :
+    environment:
       - FONTAWESOME_PACKAGE_TOKEN=${FONTAWESOME_PACKAGE_TOKEN}
 
     ports:
@@ -28,13 +27,6 @@ services:
     volumes:
       - ./frontend:/app/frontend
       - /app/frontend/node_modules
-
-    command: >
-          sh -c "
-          yarn set version 4.3.1 &&
-          yarn install &&
-          yarn fix
-          "
 
     depends_on:
       - backend
@@ -48,6 +40,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
+      - DOCKER_ENV=true
 
     ports:
       - '8000:8000'

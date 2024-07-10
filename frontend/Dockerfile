@@ -4,6 +4,8 @@ WORKDIR /app/frontend/
 
 COPY package.json .
 
+# ENV FONTAWESOME_PACKAGE_TOKEN=${FONTAWESOME_PACKAGE_TOKEN}
+
 RUN yarn install
 
 COPY . .
