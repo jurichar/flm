@@ -10,59 +10,12 @@ The backend of MyPerf is built with Django and uses PostgreSQL as the database. 
 
 ## Installation and Setup
 
-### Local Development
-
-#### Prerequisites
-
-Ensure you have Python and PostgreSQL installed on your system.
-
-#### Steps
-
-1. Create a virtual environment and activate it:
-
-```bash
-python -m venv venv
-source venv/bin/activate
-```
-
-2. Install the dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-3. Run the migrations:
-
-```bash
-python manage.py migrate
-```
-
-4. Start the development server:
-
-```bash
-python manage.py runserver
-```
-
-The application will be available at <http://localhost:8000>.
-
 ### Docker Development
-
-#### Prerequisites
 
 Ensure you have Docker installed on your system.
 
-#### Steps
-
-1. Build the Docker image:
-
 ```bash
-docker build -t myperf-backend .
-```
-
-2. Start the application:
-
-```bash
-docker run -p 8000:8000 myperf-backend
+docker-compose up backend
 ```
 
 The application will be available at <http://localhost:8000>.
