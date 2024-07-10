@@ -13,6 +13,7 @@ const App = () => {
     'Calculator',
     'Estimate',
     'Estimate_Generator',
+    'Invoice_Generator',
     'Invoice',
   ]);
 

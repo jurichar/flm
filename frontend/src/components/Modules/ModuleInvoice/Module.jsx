@@ -92,9 +92,9 @@ const chartConfig = {
 
 const ModuleInvoice = () => {
   return (
-    <Card>
-      <Chart {...chartConfig} />
-    </Card>
+    <div>
+      <p>Nothing here now.</p>
+    </div>
   );
 };
 
