@@ -10,7 +10,6 @@ import {
   PDFViewer,
 } from '@react-pdf/renderer';
 
-// Define styles for the PDF
 const styles = StyleSheet.create({
   page: {
     padding: 30,
@@ -21,14 +20,19 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 18,
     marginBottom: 20,
+    color: '#000080', // Dark blue color
   },
   text: {
     fontSize: 12,
     marginBottom: 5,
   },
+  subtext: {
+    fontSize: 8,
+  },
   addressContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 20,
   },
   footer: {
     marginTop: 20,
@@ -42,21 +46,52 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRightWidth: 0,
     borderBottomWidth: 0,
+    marginBottom: 10,
   },
   tableRow: {
-    margin: 'auto',
     flexDirection: 'row',
   },
-  tableCol: {
-    width: '20%',
+  tableCol40: {
+    width: '40%',
     borderStyle: 'solid',
     borderWidth: 1,
     borderLeftWidth: 0,
     borderTopWidth: 0,
+    padding: 5,
+  },
+  tableCol70: {
+    width: '17.5%', // Each of the remaining four columns will take 17.5% to sum up to 70%
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    padding: 5,
+  },
+  tableColHeader40: {
+    width: '40%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    padding: 5,
+    backgroundColor: '#f2f2f2',
+  },
+  tableColHeader70: {
+    width: '17.5%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    padding: 5,
+    backgroundColor: '#f2f2f2',
+  },
+  tableCellHeader: {
+    margin: 'auto',
+    fontSize: 10,
+    fontWeight: 'bold',
   },
   tableCell: {
     margin: 'auto',
-    marginTop: 5,
     fontSize: 10,
   },
   summary: {
@@ -64,114 +99,163 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'right',
   },
+  boldText: {
+    fontWeight: 'bold',
+  },
+  signSection: {
+    marginVertical: 40,
+    textAlign: 'left',
+    fontSize: 10,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    padding: 10,
+    width: '50%',
+    alignSelf: 'flex-end',
+  },
+  signText: {
+    marginBottom: 5,
+  },
+  divider: {
+    height: 1,
+    width: '100%',
+    backgroundColor: 'black',
+  },
 });
 
-// PDF Document Component
 const PDFDocument = ({ formData }) => (
   <Document>
     <Page style={styles.page}>
       <View style={styles.section}>
-        <Text style={styles.header}>Devis</Text>
+        <Text style={styles.header}>DEVIS</Text>
       </View>
       <View style={styles.addressContainer}>
         <View style={styles.section}>
-          <Text style={styles.text}>MONSIEUR J DEVIS</Text>
-          <Text style={styles.text}>1 Rue X</Text>
-          <Text style={styles.text}>75000 Paris</Text>
+          <Text style={styles.text}>MONSIEUR {formData.clientName}</Text>
+          <Text style={styles.text}>{formData.clientAddressLine}</Text>
+          <Text style={styles.text}>
+            {formData.clientPostalCode} {formData.clientCity}
+          </Text>
           <Text style={styles.text}>France</Text>
         </View>
-        <View style={[styles.section]}>
-          <Text style={styles.text}>ENTREPRISE X</Text>
-          <Text style={styles.text}>1 Rue Z</Text>
-          <Text style={styles.text}>75000 Paris</Text>
+        <View style={styles.section}>
+          <Text style={styles.text}>ENTREPRISE {formData.companyName}</Text>
+          <Text style={styles.text}>{formData.companyAddressLine}</Text>
+          <Text style={styles.text}>
+            {formData.companyPostalCode} {formData.companyCity}
+          </Text>
           <Text style={styles.text}>France</Text>
-          <Text style={styles.text}>SIREN : 0</Text>
         </View>
       </View>
       <View style={styles.section}>
-        <Text style={styles.text}>Numéro du devis : 1</Text>
-        <Text style={styles.text}>Date d&apos;émission : 10/07/2024</Text>
+        <Text style={styles.text}>SIREN : {formData.companySIREN}</Text>
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.text}>
+          Numéro du devis : {formData.estimateNumber}
+        </Text>
+        <Text style={styles.text}>
+          Date d&apos;émission : {formData.issueDate}
+        </Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.text}>Description :</Text>
         <View style={styles.table}>
           <View style={styles.tableRow}>
-            <View style={styles.tableCol}>
-              <Text style={styles.tableCell}>Détails</Text>
+            <View style={styles.tableColHeader40}>
+              <Text style={styles.tableCellHeader}>Détails</Text>
             </View>
-            <View style={styles.tableCol}>
-              <Text style={styles.tableCell}>Qté</Text>
+            <View style={styles.tableColHeader70}>
+              <Text style={styles.tableCellHeader}>Qté</Text>
             </View>
-            <View style={styles.tableCol}>
-              <Text style={styles.tableCell}>Prix Unitaire</Text>
+            <View style={styles.tableColHeader70}>
+              <Text style={styles.tableCellHeader}>Prix Unitaire</Text>
             </View>
-            <View style={styles.tableCol}>
-              <Text style={styles.tableCell}>TVA %</Text>
+            <View style={styles.tableColHeader70}>
+              <Text style={styles.tableCellHeader}>TVA %</Text>
             </View>
-            <View style={styles.tableCol}>
-              <Text style={styles.tableCell}>Total</Text>
+            <View style={styles.tableColHeader70}>
+              <Text style={styles.tableCellHeader}>Total</Text>
             </View>
           </View>
           <View style={styles.tableRow}>
-            <View style={styles.tableCol}>
-              <Text style={styles.tableCell}>
-                Journée de développement web:
-              </Text>
-              <Text style={styles.tableCell}>
-                - 3 jours entre le 8 Juillet au 12 Juillet
-              </Text>
-              <Text style={styles.tableCell}>
-                - 5 jours du 15 Juillet au 19 Juillet
-              </Text>
-              <Text style={styles.tableCell}>
-                - 5 jours du 22 Juillet au 26 Juillet
-              </Text>
+            <View style={styles.tableCol40}>
+              <Text style={styles.tableCell}>{formData.itemName}</Text>
+              <Text style={styles.tableCell}>{formData.itemDetails}</Text>
             </View>
-            <View style={styles.tableCol}>
-              <Text style={styles.tableCell}>13</Text>
+            <View style={styles.tableCol70}>
+              <Text style={styles.tableCell}>{formData.itemQuantity}</Text>
             </View>
-            <View style={styles.tableCol}>
-              <Text style={styles.tableCell}>500,00 €</Text>
+            <View style={styles.tableCol70}>
+              <Text style={styles.tableCell}>{formData.itemUnitPrice}</Text>
             </View>
-            <View style={styles.tableCol}>
-              <Text style={styles.tableCell}>0%</Text>
+            <View style={styles.tableCol70}>
+              <Text style={styles.tableCell}>{formData.itemTVA}</Text>
             </View>
-            <View style={styles.tableCol}>
-              <Text style={styles.tableCell}>6 500,00 €</Text>
+            <View style={styles.tableCol70}>
+              <Text style={styles.tableCell}>{formData.itemTotalPrice}</Text>
             </View>
           </View>
         </View>
       </View>
       <View style={styles.summary}>
-        <Text style={styles.text}>Total HT: 6 500,00 €</Text>
-        <Text style={styles.text}>TVA: 0,00 €</Text>
-        <Text style={styles.text}>Total TTC: 6 500,00 €</Text>
+        <Text style={styles.text}>Total HT: {formData.totalHT}</Text>
+        <Text style={styles.text}>TVA: {formData.totalTVA}</Text>
+        <Text style={styles.text}>Total TTC: {formData.totalTTC}</Text>
+        <Text style={styles.subtext}>
+          TVA non applicable, article 293B du CGI
+        </Text>
+      </View>
+      <View style={styles.divider} />
+      <View style={styles.signSection}>
+        <Text style={styles.signText}>BON POUR ACCORD</Text>
+        <Text style={styles.signText}>Signé le : {formData.signDate}</Text>
+        <Text style={styles.signText}>À : {formData.signLocation}</Text>
       </View>
       <View style={styles.footer}>
-        <Text>TVA non applicable, article 293B du CGI</Text>
+        <Text>
+          MONSIEUR {formData.name} vous a envoyé ce devis le 09 juillet 2024.
+        </Text>
         <Text>
           Ce devis doit être accepté dans un délai de 15 jours à compter de
-          cette date.
+          cette date. Passé ce délai, il sera nécessaire de demander un nouveau
+          devis.
         </Text>
         <Text>
-          Aucune pénalité de retard ni indemnité de recouvrement ne s'appliquent
-          à ce devis.
+          À noter qu&apos;aucune pénalité de retard ni indemnité de recouvrement
+          ne s&apos;appliquent à ce devis, mais elles seront applicables aux
+          factures émises suite à l&apos;acceptation de ce devis. Aucun escompte
+          pour paiement anticipé ne sera accordé.
         </Text>
-        <Text>Aucun escompte pour paiement anticipé ne sera accordé.</Text>
       </View>
     </Page>
   </Document>
 );
 
-// Main Component
 const ModuleEstimateGenerator = () => {
   const [formData, setFormData] = useState({
-    estimateName: '',
-    amount: '',
-    description: '',
+    clientName: '',
     clientAddressLine: '',
     clientPostalCode: '',
     clientCity: '',
+    companyName: 'X',
+    companyAddressLine: '1 Rue Z',
+    companyPostalCode: '75000',
+    companyCity: 'Paris',
+    companySIREN: '0',
+    estimateNumber: '1',
+    issueDate: '10/07/2024',
+    itemName: 'Journée de développement web',
+    itemDetails:
+      '- 3 jours entre le 8 Juillet au 12 Juillet\n- 5 jours du 15 Juillet au 19 Juillet\n- 5 jours du 22 Juillet au 26 Juillet',
+    itemQuantity: '13',
+    itemUnitPrice: '500,00 €',
+    itemTVA: '0%',
+    itemTotalPrice: '6 500,00 €',
+    totalHT: '6 500,00 €',
+    totalTVA: '0,00 €',
+    totalTTC: '6 500,00 €',
+    signDate: '',
+    signLocation: '',
   });
 
   const handleInputChange = (e) => {
@@ -186,23 +270,10 @@ const ModuleEstimateGenerator = () => {
     <div className="w-full h-full overflow-scroll">
       <h1>Estimate Generator</h1>
       <Input
-        label="Estimate's Name"
-        name="estimateName"
+        label="Client's Name"
+        name="clientName"
         onChange={handleInputChange}
-        value={formData.estimateName}
-      />
-      <Input
-        label="Amount"
-        name="amount"
-        onChange={handleInputChange}
-        type="number"
-        value={formData.amount}
-      />
-      <Textarea
-        label="Description"
-        name="description"
-        onChange={handleInputChange}
-        value={formData.description}
+        value={formData.clientName}
       />
       <Input
         label="Client Address Line"
@@ -221,6 +292,84 @@ const ModuleEstimateGenerator = () => {
         name="clientCity"
         onChange={handleInputChange}
         value={formData.clientCity}
+      />
+      <Input
+        label="Estimate Number"
+        name="estimateNumber"
+        onChange={handleInputChange}
+        value={formData.estimateNumber}
+      />
+      <Input
+        label="Issue Date"
+        name="issueDate"
+        onChange={handleInputChange}
+        value={formData.issueDate}
+      />
+      <Input
+        label="Item Name"
+        name="itemName"
+        onChange={handleInputChange}
+        value={formData.itemName}
+      />
+      <Textarea
+        label="Item Details"
+        name="itemDetails"
+        onChange={handleInputChange}
+        value={formData.itemDetails}
+      />
+      <Input
+        label="Item Quantity"
+        name="itemQuantity"
+        onChange={handleInputChange}
+        value={formData.itemQuantity}
+      />
+      <Input
+        label="Item Unit Price"
+        name="itemUnitPrice"
+        onChange={handleInputChange}
+        value={formData.itemUnitPrice}
+      />
+      <Input
+        label="Item TVA"
+        name="itemTVA"
+        onChange={handleInputChange}
+        value={formData.itemTVA}
+      />
+      <Input
+        label="Item Total Price"
+        name="itemTotalPrice"
+        onChange={handleInputChange}
+        value={formData.itemTotalPrice}
+      />
+      <Input
+        label="Total HT"
+        name="totalHT"
+        onChange={handleInputChange}
+        value={formData.totalHT}
+      />
+      <Input
+        label="Total TVA"
+        name="totalTVA"
+        onChange={handleInputChange}
+        value={formData.totalTVA}
+      />
+      <Input
+        label="Total TTC"
+        name="totalTTC"
+        onChange={handleInputChange}
+        value={formData.totalTTC}
+      />
+      <Input
+        label="Sign Date"
+        name="signDate"
+        onChange={handleInputChange}
+        value={formData.signDate}
+      />
+      <Input
+        label="Sign Location"
+        name="signLocation"
+        onChange={handleInputChange}
+        value={formData.signLocation}
       />
 
       <PDFDownloadLink
