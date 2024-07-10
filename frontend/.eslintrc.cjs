@@ -34,7 +34,6 @@ module.exports = {
       { destructureInSignature: 'always' },
     ],
     'react/jsx-no-leaked-render': ['error', { validStrategies: ['ternary'] }],
-    'react/jsx-max-depth': ['error', { max: 5 }],
     'react/function-component-definition': [
       'warn',
       { namedComponents: 'arrow-function' },

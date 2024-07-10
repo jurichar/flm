@@ -1,6 +1,6 @@
 import { List, ListItem, Typography, Chip } from '@material-tailwind/react';
 
-const ModuleEstimatePreview = () => {
+const ModuleEstimateGeneratorPreview = () => {
   const estimates = [
     { id: 1, name: 'Estimate 1', amount: '50€', sent: 'true', sign: 'true' },
     { id: 2, name: 'Estimate 2', amount: '1600€', sent: 'true', sign: 'false' },
@@ -42,4 +42,4 @@ const ModuleEstimatePreview = () => {
   );
 };
 
-export default ModuleEstimatePreview;
+export default ModuleEstimateGeneratorPreview;

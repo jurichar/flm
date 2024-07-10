@@ -9,7 +9,12 @@ import ModulePage from './pages/ModulePage';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userModules] = useState(['Calculator', 'Estimate', 'Invoice']);
+  const [userModules] = useState([
+    'Calculator',
+    'Estimate',
+    'Estimate_Generator',
+    'Invoice',
+  ]);
 
   const handleLogin = () => {
     setIsLoggedIn(true);

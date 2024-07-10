@@ -17,7 +17,7 @@ const ModuleInvoicePreview = () => {
               key={invoice.id}
             >
               <div>
-                <Typography color="blue-gray" variant="body1">
+                <Typography color="blue-gray" variant="paragraph">
                   {invoice.name}: {invoice.amount}
                 </Typography>
               </div>
@@ -34,7 +34,7 @@ const ModuleInvoicePreview = () => {
           ))}
         </List>
       ) : (
-        <Typography color="blue-gray" variant="body1">
+        <Typography color="blue-gray" variant="paragraph">
           Aucune facture disponible.
         </Typography>
       )}
