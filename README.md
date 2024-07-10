@@ -1,6 +1,6 @@
-# Getting Started with MyPerf
+# Getting Started with Freelance-manager
 
-MyPerf is a full-stack application designed to manage and visualize performance metrics. The project utilizes Django for the backend, React for the frontend, TailwindCSS for styling, and Docker for containerization.
+Freelance-manager is a full-stack application designed to manage and visualize performance metrics. The project utilizes Django for the backend, React for the frontend, TailwindCSS for styling, and Docker for containerization.
 
 ## Technologies Used
 
@@ -18,8 +18,8 @@ MyPerf is a full-stack application designed to manage and visualize performance 
 Clone the Repository
 
 ```bash
-git clone https://github.com/HenriPiot-dev/myperf.git
-cd myperf
+git clone https://github.com/jurichar/freelance-manager.git
+cd freelance-manager
 ```
 
 Running the Application

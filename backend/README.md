@@ -1,6 +1,6 @@
-# MyPerf Backend
+# Freelance-manager Backend
 
-The backend of MyPerf is built with Django and uses PostgreSQL as the database. This document provides instructions for setting up and running the backend application.
+The backend of Freelance-manager is built with Django and uses PostgreSQL as the database. This document provides instructions for setting up and running the backend application.
 
 ## Technologies Used
 

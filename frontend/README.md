@@ -1,6 +1,6 @@
-# MyPerf Frontend
+# Freelance-manager Frontend
 
-The frontend of MyPerf is built with React, styled using TailwindCSS and Material Tailwind. This document provides instructions for setting up and running the frontend application.
+The frontend of freelance-manager is built with React, styled using TailwindCSS and Material Tailwind. This document provides instructions for setting up and running the frontend application.
 
 ## Technologies Used
 
@@ -43,13 +43,13 @@ Ensure you have Docker installed on your system.
 1. Build the Docker image:
 
 ```bash
-docker build -t myperf-frontend .
+docker build -t freelance-manager-frontend .
 ```
 
 2. Start the application:
 
 ```bash
-docker run -p 3000:3000 myperf-frontend
+docker run -p 3000:3000 freelance-manager-frontend
 ```
 
 The application will be available at <http://localhost:3000>.

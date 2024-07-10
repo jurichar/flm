@@ -57,7 +57,7 @@ export const NavbarSimple = () => {
   }, []);
 
   return (
-    <Navbar className="mx-auto max-w-screen-xl px-6 py-3 mb-4">
+    <Navbar className="min-w-full px-6 py-3 mb-4">
       <div className="flex items-center justify-between text-blue-gray-900">
         <div className="flex">
           <Typography
