@@ -177,24 +177,26 @@ const PDFDocument = ({ formData }) => (
               <Text style={styles.tableCellHeader}>Total</Text>
             </View>
           </View>
-          <View style={styles.tableRow}>
-            <View style={styles.tableCol40}>
-              <Text style={styles.tableCell}>{formData.itemName}</Text>
-              <Text style={styles.tableCell}>{formData.itemDetails}</Text>
+          {formData.items.map((item, index) => (
+            <View key={index} style={styles.tableRow}>
+              <View style={styles.tableCol40}>
+                <Text style={styles.tableCell}>{item.name}</Text>
+                <Text style={styles.tableCell}>{item.details}</Text>
+              </View>
+              <View style={styles.tableCol70}>
+                <Text style={styles.tableCell}>{item.quantity}</Text>
+              </View>
+              <View style={styles.tableCol70}>
+                <Text style={styles.tableCell}>{item.unitPrice}</Text>
+              </View>
+              <View style={styles.tableCol70}>
+                <Text style={styles.tableCell}>{item.TVA}</Text>
+              </View>
+              <View style={styles.tableCol70}>
+                <Text style={styles.tableCell}>{item.totalPrice}</Text>
+              </View>
             </View>
-            <View style={styles.tableCol70}>
-              <Text style={styles.tableCell}>{formData.itemQuantity}</Text>
-            </View>
-            <View style={styles.tableCol70}>
-              <Text style={styles.tableCell}>{formData.itemUnitPrice}</Text>
-            </View>
-            <View style={styles.tableCol70}>
-              <Text style={styles.tableCell}>{formData.itemTVA}</Text>
-            </View>
-            <View style={styles.tableCol70}>
-              <Text style={styles.tableCell}>{formData.itemTotalPrice}</Text>
-            </View>
-          </View>
+          ))}
         </View>
       </View>
       <View style={styles.summary}>
@@ -244,13 +246,42 @@ const ModuleEstimateGenerator = () => {
     companySIREN: '0',
     estimateNumber: '1',
     issueDate: '10/07/2024',
-    itemName: 'Journée de développement web',
-    itemDetails:
-      '- 3 jours entre le 8 Juillet au 12 Juillet\n- 5 jours du 15 Juillet au 19 Juillet\n- 5 jours du 22 Juillet au 26 Juillet',
-    itemQuantity: '13',
-    itemUnitPrice: '500,00 €',
-    itemTVA: '0%',
-    itemTotalPrice: '6 500,00 €',
+    items: [
+      {
+        name: 'Journée de développement web',
+        details:
+          '- 3 jours entre le 8 Juillet au 12 Juillet\n- 5 jours du 15 Juillet au 19 Juillet\n- 5 jours du 22 Juillet au 26 Juillet',
+        quantity: '13',
+        unitPrice: '500,00 €',
+        TVA: '0%',
+        totalPrice: '6 500,00 €',
+      },
+      {
+        name: 'Journée de développement web',
+        details: '',
+        quantity: '13',
+        unitPrice: '500,00 €',
+        TVA: '0%',
+        totalPrice: '6 500,00 €',
+      },
+      {
+        name: 'Journée de développement web',
+        details:
+          '- 3 jours entre le 8 Juillet au 12 Juillet\n- 5 jours du 15 Juillet au 19 Juillet\n- 5 jours du 22 Juillet au 26 Juillet',
+        quantity: '13',
+        unitPrice: '500,00 €',
+        TVA: '0%',
+        totalPrice: '6 500,00 €',
+      },
+      {
+        name: 'Journée de développement web',
+        details: '',
+        quantity: '13',
+        unitPrice: '500,00 €',
+        TVA: '0%',
+        totalPrice: '6 500,00 €',
+      },
+    ],
     totalHT: '6 500,00 €',
     totalTVA: '0,00 €',
     totalTTC: '6 500,00 €',
@@ -380,7 +411,7 @@ const ModuleEstimateGenerator = () => {
           <Button>{loading ? 'Generating PDF...' : 'Generate PDF'}</Button>
         )}
       </PDFDownloadLink>
-      <PDFViewer width="1000" height="600">
+      <PDFViewer width="920" height="600">
         <PDFDocument formData={formData} />
       </PDFViewer>
     </div>
