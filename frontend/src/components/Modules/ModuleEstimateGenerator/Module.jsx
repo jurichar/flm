@@ -1,5 +1,12 @@
-import { useState } from 'react';
-import { Button, Input, Textarea } from '@material-tailwind/react';
+import { useCallback, useEffect, useState } from 'react';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Input,
+  Textarea,
+  Typography,
+} from '@material-tailwind/react';
 import {
   Page,
   Text,
@@ -130,24 +137,24 @@ const PDFDocument = ({ formData }) => (
       </View>
       <View style={styles.addressContainer}>
         <View style={styles.section}>
-          <Text style={styles.text}>MONSIEUR {formData.clientName}</Text>
+          <Text style={styles.text}>MONSIEUR {formData.name}</Text>
+          <Text style={styles.text}>{formData.addressLine}</Text>
+          <Text style={styles.text}>
+            {formData.postalCode} {formData.city}
+          </Text>
+          <Text style={styles.text}>France</Text>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.text}>ENTREPRISE {formData.clientName}</Text>
           <Text style={styles.text}>{formData.clientAddressLine}</Text>
           <Text style={styles.text}>
             {formData.clientPostalCode} {formData.clientCity}
           </Text>
           <Text style={styles.text}>France</Text>
         </View>
-        <View style={styles.section}>
-          <Text style={styles.text}>ENTREPRISE {formData.companyName}</Text>
-          <Text style={styles.text}>{formData.companyAddressLine}</Text>
-          <Text style={styles.text}>
-            {formData.companyPostalCode} {formData.companyCity}
-          </Text>
-          <Text style={styles.text}>France</Text>
-        </View>
       </View>
       <View style={styles.section}>
-        <Text style={styles.text}>SIREN : {formData.companySIREN}</Text>
+        <Text style={styles.text}>SIREN : {formData.SIREN}</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.text}>
@@ -187,13 +194,13 @@ const PDFDocument = ({ formData }) => (
                 <Text style={styles.tableCell}>{item.quantity}</Text>
               </View>
               <View style={styles.tableCol70}>
-                <Text style={styles.tableCell}>{item.unitPrice}</Text>
+                <Text style={styles.tableCell}>{item.unitPrice} €</Text>
               </View>
               <View style={styles.tableCol70}>
                 <Text style={styles.tableCell}>{item.TVA}</Text>
               </View>
               <View style={styles.tableCol70}>
-                <Text style={styles.tableCell}>{item.totalPrice}</Text>
+                <Text style={styles.tableCell}>{item.totalPrice} €</Text>
               </View>
             </View>
           ))}
@@ -215,7 +222,8 @@ const PDFDocument = ({ formData }) => (
       </View>
       <View style={styles.footer}>
         <Text>
-          MONSIEUR {formData.name} vous a envoyé ce devis le 09 juillet 2024.
+          MONSIEUR {formData.name} vous a envoyé ce devis le{' '}
+          {formData.issueDate}.
         </Text>
         <Text>
           Ce devis doit être accepté dans un délai de 15 jours à compter de
@@ -234,187 +242,200 @@ const PDFDocument = ({ formData }) => (
 );
 
 const ModuleEstimateGenerator = () => {
+  const currentDate = new Date();
+
+  const formattedDate = currentDate.toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
   const [formData, setFormData] = useState({
-    clientName: '',
-    clientAddressLine: '',
-    clientPostalCode: '',
-    clientCity: '',
-    companyName: 'X',
-    companyAddressLine: '1 Rue Z',
-    companyPostalCode: '75000',
-    companyCity: 'Paris',
-    companySIREN: '0',
+    name: 'Jules CIRADE',
+    addressLine: '1 rue X',
+    postalCode: '75000',
+    city: 'Paris',
+    SIREN: '000000000',
+    clientName: 'Company X',
+    clientAddressLine: '1 rue X',
+    clientPostalCode: '75000',
+    clientCity: 'Paris',
     estimateNumber: '1',
-    issueDate: '10/07/2024',
-    items: [
-      {
-        name: 'Journée de développement web',
-        details:
-          '- 3 jours entre le 8 Juillet au 12 Juillet\n- 5 jours du 15 Juillet au 19 Juillet\n- 5 jours du 22 Juillet au 26 Juillet',
-        quantity: '13',
-        unitPrice: '500,00 €',
-        TVA: '0%',
-        totalPrice: '6 500,00 €',
-      },
-      {
-        name: 'Journée de développement web',
-        details: '',
-        quantity: '13',
-        unitPrice: '500,00 €',
-        TVA: '0%',
-        totalPrice: '6 500,00 €',
-      },
-      {
-        name: 'Journée de développement web',
-        details:
-          '- 3 jours entre le 8 Juillet au 12 Juillet\n- 5 jours du 15 Juillet au 19 Juillet\n- 5 jours du 22 Juillet au 26 Juillet',
-        quantity: '13',
-        unitPrice: '500,00 €',
-        TVA: '0%',
-        totalPrice: '6 500,00 €',
-      },
-      {
-        name: 'Journée de développement web',
-        details: '',
-        quantity: '13',
-        unitPrice: '500,00 €',
-        TVA: '0%',
-        totalPrice: '6 500,00 €',
-      },
-    ],
-    totalHT: '6 500,00 €',
+    issueDate: formattedDate,
+    items: [],
+    totalHT: '0,00 €',
     totalTVA: '0,00 €',
-    totalTTC: '6 500,00 €',
+    totalTTC: '0,00 €',
     signDate: '',
     signLocation: '',
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (e, index = null) => {
+    const { name, value, checked, type } = e.target;
+    if (index !== null) {
+      const updatedItems = formData.items.map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              [name]: type === 'checkbox' ? (checked ? '10' : '0') : value,
+            }
+          : item,
+      );
+      setFormData({
+        ...formData,
+        items: updatedItems,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+  };
+
+  const addItem = () => {
+    const newItem = {
+      name: '',
+      details: '',
+      quantity: '',
+      unitPrice: '',
+      TVA: '10', // Assume TVA is 10% by default
+      totalPrice: '',
+    };
     setFormData({
       ...formData,
-      [name]: value,
+      items: [...formData.items, newItem],
     });
   };
 
-  return (
-    <div className="w-full h-full overflow-scroll">
-      <h1>Estimate Generator</h1>
-      <Input
-        label="Client's Name"
-        name="clientName"
-        onChange={handleInputChange}
-        value={formData.clientName}
-      />
-      <Input
-        label="Client Address Line"
-        name="clientAddressLine"
-        onChange={handleInputChange}
-        value={formData.clientAddressLine}
-      />
-      <Input
-        label="Client Postal Code"
-        name="clientPostalCode"
-        onChange={handleInputChange}
-        value={formData.clientPostalCode}
-      />
-      <Input
-        label="Client City"
-        name="clientCity"
-        onChange={handleInputChange}
-        value={formData.clientCity}
-      />
-      <Input
-        label="Estimate Number"
-        name="estimateNumber"
-        onChange={handleInputChange}
-        value={formData.estimateNumber}
-      />
-      <Input
-        label="Issue Date"
-        name="issueDate"
-        onChange={handleInputChange}
-        value={formData.issueDate}
-      />
-      <Input
-        label="Item Name"
-        name="itemName"
-        onChange={handleInputChange}
-        value={formData.itemName}
-      />
-      <Textarea
-        label="Item Details"
-        name="itemDetails"
-        onChange={handleInputChange}
-        value={formData.itemDetails}
-      />
-      <Input
-        label="Item Quantity"
-        name="itemQuantity"
-        onChange={handleInputChange}
-        value={formData.itemQuantity}
-      />
-      <Input
-        label="Item Unit Price"
-        name="itemUnitPrice"
-        onChange={handleInputChange}
-        value={formData.itemUnitPrice}
-      />
-      <Input
-        label="Item TVA"
-        name="itemTVA"
-        onChange={handleInputChange}
-        value={formData.itemTVA}
-      />
-      <Input
-        label="Item Total Price"
-        name="itemTotalPrice"
-        onChange={handleInputChange}
-        value={formData.itemTotalPrice}
-      />
-      <Input
-        label="Total HT"
-        name="totalHT"
-        onChange={handleInputChange}
-        value={formData.totalHT}
-      />
-      <Input
-        label="Total TVA"
-        name="totalTVA"
-        onChange={handleInputChange}
-        value={formData.totalTVA}
-      />
-      <Input
-        label="Total TTC"
-        name="totalTTC"
-        onChange={handleInputChange}
-        value={formData.totalTTC}
-      />
-      <Input
-        label="Sign Date"
-        name="signDate"
-        onChange={handleInputChange}
-        value={formData.signDate}
-      />
-      <Input
-        label="Sign Location"
-        name="signLocation"
-        onChange={handleInputChange}
-        value={formData.signLocation}
-      />
+  const calculateTotals = useCallback(() => {
+    let totalHT = 0;
+    let totalTVA = 0;
+    let totalTTC = 0;
 
-      <PDFDownloadLink
-        document={<PDFDocument formData={formData} />}
-        fileName="estimate.pdf"
-      >
-        {({ loading }) => (
-          <Button>{loading ? 'Generating PDF...' : 'Generate PDF'}</Button>
-        )}
-      </PDFDownloadLink>
+    const updatedItems = formData.items.map((item) => {
+      const quantity = parseFloat(item.quantity) || 0;
+      const unitPrice = parseFloat(item.unitPrice.replace(',', '.')) || 0;
+      const TVA = parseFloat(item.TVA) / 100 || 0;
+
+      const itemTotalPrice = unitPrice * quantity;
+      const itemTotalTVA = itemTotalPrice * TVA;
+      const itemTotalTTC = itemTotalPrice + itemTotalTVA;
+
+      totalHT += itemTotalPrice;
+      totalTVA += itemTotalTVA;
+      totalTTC += itemTotalTTC;
+
+      return {
+        ...item,
+        totalPrice: itemTotalTTC.toFixed(2).replace('.', ','),
+      };
+    });
+
+    setFormData({
+      ...formData,
+      items: updatedItems,
+      totalHT: totalHT.toFixed(2).replace('.', ',') + ' €',
+      totalTVA: totalTVA.toFixed(2).replace('.', ',') + ' €',
+      totalTTC: totalTTC.toFixed(2).replace('.', ',') + ' €',
+    });
+  }, [formData]);
+
+  useEffect(() => {
+    calculateTotals();
+  }, [formData.items, calculateTotals]);
+
+  return (
+    <Card color="transparent" shadow={false}>
+      <Typography variant="h4" color="blue-gray">
+        Estimate Generator
+      </Typography>
+      <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+        <div className="mb-1 flex flex-col gap-2">
+          <Card className="p-4 flex flex-col gap-4">
+            <Input
+              label="Estimate Number"
+              name="estimateNumber"
+              onChange={handleInputChange}
+              value={formData.estimateNumber}
+            />
+          </Card>
+          <Card className="p-4 flex flex-col gap-4">
+            <Input
+              label="Client Name"
+              name="clientName"
+              onChange={handleInputChange}
+              value={formData.clientName}
+            />
+            <Input
+              label="Client Address Line"
+              name="clientAddressLine"
+              onChange={handleInputChange}
+              value={formData.clientAddressLine}
+            />
+            <Input
+              label="Client Postal Code"
+              name="clientPostalCode"
+              onChange={handleInputChange}
+              value={formData.clientPostalCode}
+            />
+            <Input
+              label="Client City"
+              name="clientCity"
+              onChange={handleInputChange}
+              value={formData.clientCity}
+            />
+          </Card>
+
+          {formData.items.map((item, index) => (
+            <Card key={index} className=" p-4 flex flex-col gap-6">
+              <Input
+                label="Item Name"
+                name="name"
+                onChange={(e) => handleInputChange(e, index)}
+                value={item.name}
+              />
+              <Textarea
+                label="Item Details"
+                name="details"
+                onChange={(e) => handleInputChange(e, index)}
+                value={item.details}
+              />
+              <Input
+                label="Item Quantity"
+                name="quantity"
+                onChange={(e) => handleInputChange(e, index)}
+                value={item.quantity}
+              />
+              <Input
+                label="Item Unit Price"
+                name="unitPrice"
+                onChange={(e) => handleInputChange(e, index)}
+                value={item.unitPrice}
+              />
+              <Checkbox
+                checked={item.TVA === '10'}
+                label="TVA 10%"
+                name="TVA"
+                onChange={(e) => handleInputChange(e, index)}
+              />
+            </Card>
+          ))}
+          <Button onClick={addItem}>+</Button>
+        </div>
+        <PDFDownloadLink
+          document={<PDFDocument formData={formData} />}
+          fileName="estimate.pdf"
+        >
+          {({ loading }) => (
+            <Button>{loading ? 'Generating PDF...' : 'Generate PDF'}</Button>
+          )}
+        </PDFDownloadLink>
+      </form>
       <PDFViewer width="920" height="600">
         <PDFDocument formData={formData} />
       </PDFViewer>
-    </div>
+    </Card>
   );
 };
 
