@@ -8,7 +8,7 @@ const ModuleInvoicePreview = () => {
   ];
 
   return (
-    <div className="w-full h-full overflow-scroll">
+    <div className="w-full h-full overflow-scroll ">
       {invoices.length > 0 ? (
         <List>
           {invoices.map((invoice) => (
@@ -17,7 +17,11 @@ const ModuleInvoicePreview = () => {
               key={invoice.id}
             >
               <div>
-                <Typography color="blue-gray" variant="paragraph">
+                <Typography
+                  className="text-lg"
+                  color="blue-gray"
+                  variant="paragraph"
+                >
                   {invoice.name}: {invoice.amount}
                 </Typography>
               </div>

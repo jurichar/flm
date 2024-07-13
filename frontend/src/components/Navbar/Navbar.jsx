@@ -62,13 +62,12 @@ export const NavbarSimple = () => {
         <div className="flex">
           <Typography
             as={Link}
-            className="mr-4 cursor-pointer py-1.5"
+            className="mr-4 cursor-pointer py-1.5 text-md"
             to="/"
-            variant="h6"
           >
             MyFree
           </Typography>
-          <Typography className="border-black border-l-2 px-4 cursor-pointer py-1.5">
+          <Typography className="border-black border-l-2 px-4 cursor-pointer py-1.5 text-md">
             Joe Doe
           </Typography>
         </div>
@@ -76,7 +75,7 @@ export const NavbarSimple = () => {
           <NavList />
         </div>
         <IconButton
-          className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+          className="text-xl ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
           onClick={() => setOpenNav(!openNav)}
           variant="text"
         >

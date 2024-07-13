@@ -17,7 +17,11 @@ const ModuleEstimatePreview = () => {
               key={estimate.id}
             >
               <div>
-                <Typography color="blue-gray" variant="paragraph">
+                <Typography
+                  className="text-lg"
+                  color="blue-gray"
+                  variant="paragraph"
+                >
                   {estimate.name}: {estimate.amount}
                 </Typography>
               </div>

@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Checkbox,
+  IconButton,
   Input,
   Textarea,
   Typography,
@@ -16,6 +17,8 @@ import {
   PDFDownloadLink,
   PDFViewer,
 } from '@react-pdf/renderer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const styles = StyleSheet.create({
   page: {
@@ -27,7 +30,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 18,
     marginBottom: 20,
-    color: '#000080', // Dark blue color
+    color: '#000080',
   },
   text: {
     fontSize: 12,
@@ -67,7 +70,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   tableCol70: {
-    width: '17.5%', // Each of the remaining four columns will take 17.5% to sum up to 70%
+    width: '17.5%',
     borderStyle: 'solid',
     borderWidth: 1,
     borderLeftWidth: 0,
@@ -101,6 +104,10 @@ const styles = StyleSheet.create({
     margin: 'auto',
     fontSize: 10,
   },
+  tableCellLeft: {
+    textAlign: 'left',
+    fontSize: 10,
+  },
   summary: {
     marginTop: 10,
     marginBottom: 10,
@@ -116,7 +123,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     padding: 10,
-    width: '50%',
+    width: '70%',
     alignSelf: 'flex-end',
   },
   signText: {
@@ -129,7 +136,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PDFDocument = ({ formData }) => (
+const PDFDocument = ({ formData, items }) => (
   <Document>
     <Page style={styles.page}>
       <View style={styles.section}>
@@ -184,11 +191,11 @@ const PDFDocument = ({ formData }) => (
               <Text style={styles.tableCellHeader}>Total</Text>
             </View>
           </View>
-          {formData.items.map((item, index) => (
+          {items.map((item, index) => (
             <View key={index} style={styles.tableRow}>
               <View style={styles.tableCol40}>
                 <Text style={styles.tableCell}>{item.name}</Text>
-                <Text style={styles.tableCell}>{item.details}</Text>
+                <Text style={styles.tableCellLeft}>{item.details}</Text>
               </View>
               <View style={styles.tableCol70}>
                 <Text style={styles.tableCell}>{item.quantity}</Text>
@@ -243,6 +250,13 @@ const PDFDocument = ({ formData }) => (
 
 const ModuleEstimateGenerator = () => {
   const currentDate = new Date();
+  const user = {
+    name: 'Fred PIERREAFEU',
+    addressLine: '1 rue X',
+    postalCode: '75000',
+    city: 'Paris',
+    SIREN: '000000000',
+  };
 
   const formattedDate = currentDate.toLocaleDateString('fr-FR', {
     day: '2-digit',
@@ -251,29 +265,30 @@ const ModuleEstimateGenerator = () => {
   });
 
   const [formData, setFormData] = useState({
-    name: 'Jules CIRADE',
-    addressLine: '1 rue X',
-    postalCode: '75000',
-    city: 'Paris',
-    SIREN: '000000000',
-    clientName: 'Company X',
-    clientAddressLine: '1 rue X',
-    clientPostalCode: '75000',
-    clientCity: 'Paris',
+    name: user.name,
+    addressLine: user.addressLine,
+    postalCode: user.postalCode,
+    city: user.city,
+    SIREN: user.SIREN,
     estimateNumber: '1',
     issueDate: formattedDate,
-    items: [],
-    totalHT: '0,00 €',
-    totalTVA: '0,00 €',
-    totalTTC: '0,00 €',
+    clientName: '',
+    clientAddressLine: '',
+    clientPostalCode: '75000',
+    clientCity: 'Paris',
+    totalHT: '0.00',
+    totalTVA: '0.00',
+    totalTTC: '0.00',
     signDate: '',
     signLocation: '',
   });
 
+  const [items, setItems] = useState([]);
+
   const handleInputChange = (e, index = null) => {
     const { name, value, checked, type } = e.target;
     if (index !== null) {
-      const updatedItems = formData.items.map((item, i) =>
+      const updatedItems = items.map((item, i) =>
         i === index
           ? {
               ...item,
@@ -281,10 +296,7 @@ const ModuleEstimateGenerator = () => {
             }
           : item,
       );
-      setFormData({
-        ...formData,
-        items: updatedItems,
-      });
+      setItems(updatedItems);
     } else {
       setFormData({
         ...formData,
@@ -299,13 +311,15 @@ const ModuleEstimateGenerator = () => {
       details: '',
       quantity: '',
       unitPrice: '',
-      TVA: '10', // Assume TVA is 10% by default
+      TVA: '10',
       totalPrice: '',
     };
-    setFormData({
-      ...formData,
-      items: [...formData.items, newItem],
-    });
+    setItems([...items, newItem]);
+  };
+
+  const removeItem = (index) => {
+    const updatedItems = items.filter((_, i) => i !== index);
+    setItems(updatedItems);
   };
 
   const calculateTotals = useCallback(() => {
@@ -313,9 +327,9 @@ const ModuleEstimateGenerator = () => {
     let totalTVA = 0;
     let totalTTC = 0;
 
-    const updatedItems = formData.items.map((item) => {
+    const updatedItems = items.map((item) => {
       const quantity = parseFloat(item.quantity) || 0;
-      const unitPrice = parseFloat(item.unitPrice.replace(',', '.')) || 0;
+      const unitPrice = parseFloat(item.unitPrice) || 0;
       const TVA = parseFloat(item.TVA) / 100 || 0;
 
       const itemTotalPrice = unitPrice * quantity;
@@ -328,114 +342,137 @@ const ModuleEstimateGenerator = () => {
 
       return {
         ...item,
-        totalPrice: itemTotalTTC.toFixed(2).replace('.', ','),
+        totalPrice: itemTotalTTC.toFixed(2),
       };
     });
 
-    setFormData({
-      ...formData,
-      items: updatedItems,
-      totalHT: totalHT.toFixed(2).replace('.', ',') + ' €',
-      totalTVA: totalTVA.toFixed(2).replace('.', ',') + ' €',
-      totalTTC: totalTTC.toFixed(2).replace('.', ',') + ' €',
-    });
-  }, [formData]);
+    setItems(updatedItems);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      totalHT: totalHT.toFixed(2),
+      totalTVA: totalTVA.toFixed(2),
+      totalTTC: totalTTC.toFixed(2),
+    }));
+  }, [items]);
 
   useEffect(() => {
-    calculateTotals();
-  }, [formData.items, calculateTotals]);
+    const timeoutId = setTimeout(() => {
+      calculateTotals();
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [items, calculateTotals]);
 
   return (
-    <Card color="transparent" shadow={false}>
-      <Typography variant="h4" color="blue-gray">
+    <>
+      <Typography color="blue-gray" variant="h4">
         Estimate Generator
       </Typography>
-      <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-        <div className="mb-1 flex flex-col gap-2">
-          <Card className="p-4 flex flex-col gap-4">
-            <Input
-              label="Estimate Number"
-              name="estimateNumber"
-              onChange={handleInputChange}
-              value={formData.estimateNumber}
-            />
-          </Card>
-          <Card className="p-4 flex flex-col gap-4">
-            <Input
-              label="Client Name"
-              name="clientName"
-              onChange={handleInputChange}
-              value={formData.clientName}
-            />
-            <Input
-              label="Client Address Line"
-              name="clientAddressLine"
-              onChange={handleInputChange}
-              value={formData.clientAddressLine}
-            />
-            <Input
-              label="Client Postal Code"
-              name="clientPostalCode"
-              onChange={handleInputChange}
-              value={formData.clientPostalCode}
-            />
-            <Input
-              label="Client City"
-              name="clientCity"
-              onChange={handleInputChange}
-              value={formData.clientCity}
-            />
-          </Card>
-
-          {formData.items.map((item, index) => (
-            <Card key={index} className=" p-4 flex flex-col gap-6">
+      <Card
+        className="flex flex-row justify-between gap-4"
+        color="transparent"
+        shadow={false}
+      >
+        <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+          <div className="mb-1 flex flex-col gap-2">
+            <Card className="p-4 flex flex-col gap-4" shadow={false}>
               <Input
-                label="Item Name"
-                name="name"
-                onChange={(e) => handleInputChange(e, index)}
-                value={item.name}
-              />
-              <Textarea
-                label="Item Details"
-                name="details"
-                onChange={(e) => handleInputChange(e, index)}
-                value={item.details}
-              />
-              <Input
-                label="Item Quantity"
-                name="quantity"
-                onChange={(e) => handleInputChange(e, index)}
-                value={item.quantity}
-              />
-              <Input
-                label="Item Unit Price"
-                name="unitPrice"
-                onChange={(e) => handleInputChange(e, index)}
-                value={item.unitPrice}
-              />
-              <Checkbox
-                checked={item.TVA === '10'}
-                label="TVA 10%"
-                name="TVA"
-                onChange={(e) => handleInputChange(e, index)}
+                label="Estimate Number"
+                name="estimateNumber"
+                onBlur={calculateTotals}
+                onChange={handleInputChange}
+                value={formData.estimateNumber}
               />
             </Card>
-          ))}
-          <Button onClick={addItem}>+</Button>
-        </div>
-        <PDFDownloadLink
-          document={<PDFDocument formData={formData} />}
-          fileName="estimate.pdf"
-        >
-          {({ loading }) => (
-            <Button>{loading ? 'Generating PDF...' : 'Generate PDF'}</Button>
-          )}
-        </PDFDownloadLink>
-      </form>
-      <PDFViewer width="920" height="600">
-        <PDFDocument formData={formData} />
-      </PDFViewer>
-    </Card>
+            <Card className="p-4 flex flex-col gap-4" shadow={false}>
+              <Input
+                label="Client Name"
+                name="clientName"
+                onChange={handleInputChange}
+                value={formData.clientName}
+              />
+              <Input
+                label="Client Address Line"
+                name="clientAddressLine"
+                onChange={handleInputChange}
+                value={formData.clientAddressLine}
+              />
+              <Input
+                label="Client Postal Code"
+                name="clientPostalCode"
+                onChange={handleInputChange}
+                value={formData.clientPostalCode}
+              />
+              <Input
+                label="Client City"
+                name="clientCity"
+                onChange={handleInputChange}
+                value={formData.clientCity}
+              />
+            </Card>
+
+            {items.map((item, index) => (
+              <Card className=" p-4 flex flex-col gap-6" key={index}>
+                <IconButton
+                  className="rounded-full"
+                  onClick={() => removeItem(index)}
+                  variant="outlined"
+                >
+                  <FontAwesomeIcon icon={faXmark} />
+                </IconButton>
+                <Input
+                  label="Item Name"
+                  name="name"
+                  onChange={(e) => handleInputChange(e, index)}
+                  value={item.name}
+                />
+                <Textarea
+                  label="Item Details"
+                  name="details"
+                  onChange={(e) => handleInputChange(e, index)}
+                  value={item.details}
+                />
+                <Input
+                  label="Item Quantity"
+                  name="quantity"
+                  onChange={(e) => handleInputChange(e, index)}
+                  value={item.quantity}
+                />
+                <Input
+                  label="Item Unit Price"
+                  name="unitPrice"
+                  onChange={(e) => handleInputChange(e, index)}
+                  value={item.unitPrice}
+                />
+                <Checkbox
+                  checked={item.TVA === '10'}
+                  label="TVA 10%"
+                  name="TVA"
+                  onChange={(e) => handleInputChange(e, index)}
+                />
+              </Card>
+            ))}
+            <Button className="w-[20rem]" onClick={addItem}>
+              Add item
+            </Button>
+            <PDFDownloadLink
+              document={<PDFDocument formData={formData} items={items} />}
+              fileName="estimate.pdf"
+            >
+              {({ loading }) => (
+                <Button className="w-[20rem]">
+                  {loading ? 'Generating PDF...' : 'Generate PDF'}
+                </Button>
+              )}
+            </PDFDownloadLink>
+          </div>
+        </form>
+        <PDFViewer height="600" width="920">
+          <PDFDocument formData={formData} items={items} />
+        </PDFViewer>
+      </Card>
+    </>
   );
 };
 

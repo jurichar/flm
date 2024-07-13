@@ -14,7 +14,7 @@ const ModuleCard = ({ moduleName, hasAccess }) => {
   const PreviewComponent = modulePreviews[moduleName];
 
   return (
-    <Card className="w-auto p-4 h-80" onClick={handleCardClick}>
+    <Card className="w-auto p-4 h-80 text-xl" onClick={handleCardClick}>
       <h3>{moduleName}</h3>
       {hasAccess(moduleName) ? (
         PreviewComponent ? (

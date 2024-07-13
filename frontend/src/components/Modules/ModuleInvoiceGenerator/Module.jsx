@@ -411,7 +411,7 @@ const ModuleInvoiceGenerator = () => {
           <Button>{loading ? 'Generating PDF...' : 'Generate PDF'}</Button>
         )}
       </PDFDownloadLink>
-      <PDFViewer width="920" height="600">
+      <PDFViewer height="600" width="920">
         <PDFDocument formData={formData} />
       </PDFViewer>
     </div>
