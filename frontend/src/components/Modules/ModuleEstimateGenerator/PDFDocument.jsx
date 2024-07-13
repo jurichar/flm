@@ -1,4 +1,4 @@
-import { Document, Page, Text, View } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
   page: {
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     padding: 10,
-    width: '50%',
+    width: '70%',
     alignSelf: 'flex-end',
   },
   signText: {
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PDFDocument = ({ formData }) => (
+const PDFDocument = ({ formValues }) => (
   <Document>
     <Page style={styles.page}>
       <View style={styles.section}>
@@ -124,31 +124,31 @@ const PDFDocument = ({ formData }) => (
       </View>
       <View style={styles.addressContainer}>
         <View style={styles.section}>
-          <Text style={styles.text}>MONSIEUR {formData.name}</Text>
-          <Text style={styles.text}>{formData.addressLine}</Text>
+          <Text style={styles.text}>MONSIEUR {formValues.name}</Text>
+          <Text style={styles.text}>{formValues.address}</Text>
           <Text style={styles.text}>
-            {formData.postalCode} {formData.city}
+            {formValues.postalCode} {formValues.city}
           </Text>
           <Text style={styles.text}>France</Text>
         </View>
         <View style={styles.section}>
-          <Text style={styles.text}>ENTREPRISE {formData.clientName}</Text>
-          <Text style={styles.text}>{formData.clientAddressLine}</Text>
+          <Text style={styles.text}>ENTREPRISE {formValues.clientName}</Text>
+          <Text style={styles.text}>{formValues.clientAddress}</Text>
           <Text style={styles.text}>
-            {formData.clientPostalCode} {formData.clientCity}
+            {formValues.clientPostalCode} {formValues.clientCity}
           </Text>
           <Text style={styles.text}>France</Text>
         </View>
       </View>
       <View style={styles.section}>
-        <Text style={styles.text}>SIREN : {formData.SIREN}</Text>
+        <Text style={styles.text}>SIREN : {formValues.SIREN}</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.text}>
-          Numéro du devis : {formData.estimateNumber}
+          Numéro du devis : {formValues.estimateNumber}
         </Text>
         <Text style={styles.text}>
-          Date d&apos;émission : {formData.issueDate}
+          Date d&apos;émission : {formValues.issueDate}
         </Text>
       </View>
       <View style={styles.section}>
@@ -171,32 +171,34 @@ const PDFDocument = ({ formData }) => (
               <Text style={styles.tableCellHeader}>Total</Text>
             </View>
           </View>
-          {formData.items.map((item, index) => (
-            <View key={index} style={styles.tableRow}>
-              <View style={styles.tableCol40}>
-                <Text style={styles.tableCell}>{item.name}</Text>
-                <Text style={styles.tableCellLeft}>{item.details}</Text>
-              </View>
-              <View style={styles.tableCol70}>
-                <Text style={styles.tableCell}>{item.quantity}</Text>
-              </View>
-              <View style={styles.tableCol70}>
-                <Text style={styles.tableCell}>{item.unitPrice} €</Text>
-              </View>
-              <View style={styles.tableCol70}>
-                <Text style={styles.tableCell}>{item.TVA}</Text>
-              </View>
-              <View style={styles.tableCol70}>
-                <Text style={styles.tableCell}>{item.totalPrice} €</Text>
-              </View>
-            </View>
-          ))}
+          {formValues.items && formValues.items.length > 0
+            ? formValues.items.map((item, index) => (
+                <View key={index} style={styles.tableRow}>
+                  <View style={styles.tableCol40}>
+                    <Text style={styles.tableCell}>{item.name}</Text>
+                    <Text style={styles.tableCellLeft}>{item.details}</Text>
+                  </View>
+                  <View style={styles.tableCol70}>
+                    <Text style={styles.tableCell}>{item.quantity}</Text>
+                  </View>
+                  <View style={styles.tableCol70}>
+                    <Text style={styles.tableCell}>{item.unitPrice} €</Text>
+                  </View>
+                  <View style={styles.tableCol70}>
+                    <Text style={styles.tableCell}>{item.TVA}</Text>
+                  </View>
+                  <View style={styles.tableCol70}>
+                    <Text style={styles.tableCell}>{item.total} €</Text>
+                  </View>
+                </View>
+              ))
+            : null}
         </View>
       </View>
       <View style={styles.summary}>
-        <Text style={styles.text}>Total HT: {formData.totalHT}</Text>
-        <Text style={styles.text}>TVA: {formData.totalTVA}</Text>
-        <Text style={styles.text}>Total TTC: {formData.totalTTC}</Text>
+        <Text style={styles.text}>Total HT: {formValues.totalHT}</Text>
+        <Text style={styles.text}>TVA: {formValues.totalTVA}</Text>
+        <Text style={styles.text}>Total TTC: {formValues.totalTTC}</Text>
         <Text style={styles.subtext}>
           TVA non applicable, article 293B du CGI
         </Text>
@@ -204,13 +206,13 @@ const PDFDocument = ({ formData }) => (
       <View style={styles.divider} />
       <View style={styles.signSection}>
         <Text style={styles.signText}>BON POUR ACCORD</Text>
-        <Text style={styles.signText}>Signé le : {formData.signDate}</Text>
-        <Text style={styles.signText}>À : {formData.signLocation}</Text>
+        <Text style={styles.signText}>Signé le : {formValues.signDate}</Text>
+        <Text style={styles.signText}>À : {formValues.signLocation}</Text>
       </View>
       <View style={styles.footer}>
         <Text>
-          MONSIEUR {formData.name} vous a envoyé ce devis le{' '}
-          {formData.issueDate}.
+          MONSIEUR {formValues.name} vous a envoyé ce devis le{' '}
+          {formValues.issueDate}.
         </Text>
         <Text>
           Ce devis doit être accepté dans un délai de 15 jours à compter de
