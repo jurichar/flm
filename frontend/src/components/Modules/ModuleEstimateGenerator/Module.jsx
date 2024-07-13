@@ -37,33 +37,39 @@ const App = () => {
     items: [],
   });
 
+  const [buffer, setBuffer] = useState(formValues);
+
   const handleInputChange = (newValues) => {
-    setFormValues((prevValues) => {
-      const updatedValues = { ...prevValues, ...newValues };
+    newValues.totalHT = newValues.items.reduce(
+      (sum, item) =>
+        sum + parseFloat(item.unitPrice || 0) * parseFloat(item.quantity || 1),
+      0,
+    );
+    newValues.totalTVA = newValues.items.reduce(
+      (sum, item) =>
+        sum +
+        (parseFloat(item.TVA || 0) / 100) * parseFloat(item.unitPrice || 0),
+      0,
+    );
+    newValues.totalTTC = newValues.items.reduce(
+      (sum, item) => sum + parseFloat(item.total || 0),
+      0,
+    );
+    setBuffer({ ...buffer, ...newValues });
+  };
 
-      updatedValues.totalHT = updatedValues.items.reduce(
-        (sum, item) => sum + parseFloat(item.unitPrice || 0),
-        0,
-      );
-      updatedValues.totalTVA = updatedValues.items.reduce(
-        (sum, item) =>
-          sum +
-          (parseFloat(item.TVA || 0) / 100) * parseFloat(item.unitPrice || 0),
-        0,
-      );
-      updatedValues.totalTTC = updatedValues.items.reduce(
-        (sum, item) => sum + parseFloat(item.total || 0),
-        0,
-      );
-
-      return updatedValues;
-    });
+  const applyChanges = () => {
+    setFormValues(buffer);
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div style={{ width: '40%', padding: '10px' }}>
-        <FormInputs onInputChange={handleInputChange} />
+        <FormInputs
+          applyChanges={applyChanges}
+          buffer={buffer}
+          onInputChange={handleInputChange}
+        />
       </div>
       <PDFViewer height="600" width="920">
         <PDFDocument formValues={formValues} />

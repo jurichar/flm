@@ -11,26 +11,23 @@ import {
 } from '@material-tailwind/react';
 import { useState } from 'react';
 
-const FormInputs = ({ onInputChange }) => {
-  const [formValues, setFormValues] = useState({
-    estimateNumber: '',
-    clientName: '',
-    clientAddress: '',
-    clientPostalCode: '',
-    clientCity: '',
-    items: [],
-  });
+const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
+  const [localValues, setLocalValues] = useState(buffer);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const newValues = { ...formValues, [name]: value };
-    setFormValues(newValues);
+    const newValues = { ...localValues, [name]: value };
+    setLocalValues(newValues);
     onInputChange(newValues);
+  };
+
+  const handleBlur = () => {
+    applyChanges();
   };
 
   const handleItemChange = (index, e) => {
     const { name, value } = e.target;
-    const newItems = formValues.items.map((item, i) => {
+    const newItems = localValues.items.map((item, i) => {
       if (i === index) {
         const newItem = { ...item, [name]: value };
 
@@ -43,23 +40,28 @@ const FormInputs = ({ onInputChange }) => {
       }
       return item;
     });
-    setFormValues({ ...formValues, items: newItems });
-    onInputChange({ ...formValues, items: newItems });
+    setLocalValues({ ...localValues, items: newItems });
+    onInputChange({ ...localValues, items: newItems });
+  };
+
+  const handleItemBlur = () => {
+    applyChanges();
   };
 
   const handleAddButton = () => {
     const newItems = [
-      ...formValues.items,
+      ...localValues.items,
       { name: '', details: '', quantity: '', unitPrice: '', TVA: 0, total: 0 },
     ];
-    setFormValues({ ...formValues, items: newItems });
-    onInputChange({ ...formValues, items: newItems });
+    setLocalValues({ ...localValues, items: newItems });
+    onInputChange({ ...localValues, items: newItems });
   };
 
   const handleRemoveItem = (index) => {
-    const newItems = formValues.items.filter((_, i) => i !== index);
-    setFormValues({ ...formValues, items: newItems });
-    onInputChange({ ...formValues, items: newItems });
+    const newItems = localValues.items.filter((_, i) => i !== index);
+    setLocalValues({ ...localValues, items: newItems });
+    onInputChange({ ...localValues, items: newItems });
+    applyChanges();
   };
 
   return (
@@ -78,38 +80,43 @@ const FormInputs = ({ onInputChange }) => {
               <Input
                 label="Estimate Number"
                 name="estimateNumber"
+                onBlur={handleBlur}
                 onChange={handleChange}
-                value={formValues.estimateNumber}
+                value={localValues.estimateNumber}
               />
             </Card>
             <Card className="p-4 flex flex-col gap-4" shadow={false}>
               <Input
                 label="Client Name"
                 name="clientName"
+                onBlur={handleBlur}
                 onChange={handleChange}
-                value={formValues.clientName}
+                value={localValues.clientName}
               />
               <Input
                 label="Client Address Line"
                 name="clientAddress"
+                onBlur={handleBlur}
                 onChange={handleChange}
-                value={formValues.clientAddress}
+                value={localValues.clientAddress}
               />
               <Input
                 label="Client Postal Code"
                 name="clientPostalCode"
+                onBlur={handleBlur}
                 onChange={handleChange}
-                value={formValues.clientPostalCode}
+                value={localValues.clientPostalCode}
               />
               <Input
                 label="Client City"
                 name="clientCity"
+                onBlur={handleBlur}
                 onChange={handleChange}
-                value={formValues.clientCity}
+                value={localValues.clientCity}
               />
             </Card>
 
-            {formValues.items.map((item, index) => (
+            {localValues.items.map((item, index) => (
               <Card className="p-4 flex flex-col gap-6" key={index}>
                 <div className="flex flex-row gap-4">
                   <IconButton
@@ -122,6 +129,7 @@ const FormInputs = ({ onInputChange }) => {
                   <Input
                     label="Item Name"
                     name="name"
+                    onBlur={handleItemBlur}
                     onChange={(e) => handleItemChange(index, e)}
                     value={item.name}
                   />
@@ -129,18 +137,21 @@ const FormInputs = ({ onInputChange }) => {
                 <Textarea
                   label="Item Details"
                   name="details"
+                  onBlur={handleItemBlur}
                   onChange={(e) => handleItemChange(index, e)}
                   value={item.details}
                 />
                 <Input
                   label="Item Quantity"
                   name="quantity"
+                  onBlur={handleItemBlur}
                   onChange={(e) => handleItemChange(index, e)}
                   value={item.quantity}
                 />
                 <Input
                   label="Item Unit Price"
                   name="unitPrice"
+                  onBlur={handleItemBlur}
                   onChange={(e) => handleItemChange(index, e)}
                   value={item.unitPrice}
                 />
@@ -148,6 +159,7 @@ const FormInputs = ({ onInputChange }) => {
                   checked={item.TVA === 10}
                   label="TVA 10%"
                   name="TVA"
+                  onBlur={handleItemBlur}
                   onChange={(e) =>
                     handleItemChange(index, {
                       target: { name: 'TVA', value: e.target.checked ? 10 : 0 },
