@@ -9,14 +9,19 @@ import {
   Textarea,
   Typography,
 } from '@material-tailwind/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
   const [localValues, setLocalValues] = useState(buffer);
 
+  useEffect(() => {
+    setLocalValues(buffer);
+  }, [buffer]);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    const newValues = { ...localValues, [name]: value };
+    const { name, value, checked, type } = e.target;
+    const newValue = type === 'checkbox' ? (checked ? 10 : 0) : value;
+    const newValues = { ...localValues, [name]: newValue };
     setLocalValues(newValues);
     onInputChange(newValues);
   };
@@ -33,7 +38,7 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
 
         const unitPrice = parseFloat(newItem.unitPrice) || 0;
         const quantity = parseInt(newItem.quantity, 10) || 0;
-        const tva = parseFloat(newItem.TVA) || 0;
+        const tva = parseFloat(localValues.TVA) || 0;
         newItem.total = unitPrice * quantity * (1 + tva / 100);
 
         return newItem;
@@ -51,10 +56,11 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
   const handleAddButton = () => {
     const newItems = [
       ...localValues.items,
-      { name: '', details: '', quantity: '', unitPrice: '', TVA: 0, total: 0 },
+      { name: '', details: '', quantity: '', unitPrice: '', total: 0 },
     ];
     setLocalValues({ ...localValues, items: newItems });
     onInputChange({ ...localValues, items: newItems });
+    applyChanges();
   };
 
   const handleRemoveItem = (index) => {
@@ -93,8 +99,8 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
                 onChange={handleChange}
                 value={localValues.clientName}
               />
-              <Input
-                label="Client Address Line"
+              <Textarea
+                label="Client Address"
                 name="clientAddress"
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -114,10 +120,16 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
                 onChange={handleChange}
                 value={localValues.clientCity}
               />
+              <Checkbox
+                checked={localValues.TVA === 10}
+                label="TVA 10%"
+                name="TVA"
+                onChange={handleChange}
+              />
             </Card>
 
             {localValues.items.map((item, index) => (
-              <Card className="p-4 flex flex-col gap-6" key={index}>
+              <Card className="p-4 flex flex-col gap-4" key={index}>
                 <div className="flex flex-row gap-4">
                   <IconButton
                     className="rounded-full w-12"
@@ -154,17 +166,6 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
                   onBlur={handleItemBlur}
                   onChange={(e) => handleItemChange(index, e)}
                   value={item.unitPrice}
-                />
-                <Checkbox
-                  checked={item.TVA === 10}
-                  label="TVA 10%"
-                  name="TVA"
-                  onBlur={handleItemBlur}
-                  onChange={(e) =>
-                    handleItemChange(index, {
-                      target: { name: 'TVA', value: e.target.checked ? 10 : 0 },
-                    })
-                  }
                 />
               </Card>
             ))}

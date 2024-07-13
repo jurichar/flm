@@ -31,6 +31,7 @@ const App = () => {
     clientAddress: '',
     clientPostalCode: '75000',
     clientCity: 'Paris',
+    TVA: 0,
     totalHT: 0,
     totalTVA: 0,
     totalTTC: 0,
