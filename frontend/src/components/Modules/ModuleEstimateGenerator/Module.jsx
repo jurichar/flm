@@ -2,8 +2,9 @@ import { useState, useMemo, useEffect } from 'react';
 import FormInputs from './FormInputs';
 import PDFDocument from './PDFDocument';
 import { PDFViewer } from '@react-pdf/renderer';
+import { Typography } from '@material-tailwind/react';
 
-const App = () => {
+const Module = () => {
   const currentDate = new Date();
   const user = {
     name: 'Fred PIERREAFEU',
@@ -79,18 +80,34 @@ const App = () => {
   );
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <div style={{ width: '40%', padding: '10px' }}>
+    <div className="flex flex-row">
+      <div className="w-2/5 p-1">
         <FormInputs
           formValues={bufferedValues}
           onInputChange={handleInputChange}
         />
       </div>
-      <PDFViewer showToolbar="false" height="600" width="920">
-        {memoizedPDFDocument}
-      </PDFViewer>
+      {bufferedValues === stableFormValues ? (
+        <PDFViewer
+          showToolbar={false}
+          pageMode="useOutlines"
+          pageLayout="singlePage"
+          height="1080"
+          width="920"
+        >
+          {memoizedPDFDocument}
+        </PDFViewer>
+      ) : (
+        <Typography
+          as="div"
+          className="mb-2 h-2 w-72 rounded-full bg-gray-300"
+          variant="paragraph"
+        >
+          &nbsp;
+        </Typography>
+      )}
     </div>
   );
 };
 
-export default App;
+export default Module;

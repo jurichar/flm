@@ -20,11 +20,22 @@ const FormInputs = ({ formValues, onInputChange }) => {
 
   const handleChange = (e) => {
     const { name, value, checked, type } = e.target;
-    const newValue = type === 'checkbox' ? (checked ? 10 : 0) : value;
+    let newValue = value;
+
+    if (name === 'estimateNumber' || name === 'clientPostalCode') {
+      newValue = value.replace(/\D/g, '');
+    }
+
+    if (type === 'checkbox') {
+      newValue = checked ? 10 : 0;
+    }
+
     const newValues = { ...localValues, [name]: newValue };
+
     if (name === 'TVA') {
       const newItems = localValues.items.map((item) => {
-        const unitPrice = parseFloat(item.unitPrice).toFixed(2) || 0;
+        const unitPrice =
+          parseFloat(item.unitPrice.replace(',', '.')).toFixed(2) || 0;
         const quantity = parseInt(item.quantity, 10) || 0;
         const tva = parseFloat(newValue).toFixed(1) || 0;
         const total = (unitPrice * quantity * (1 + tva / 100)).toFixed(2);
@@ -32,15 +43,25 @@ const FormInputs = ({ formValues, onInputChange }) => {
       });
       newValues.items = newItems;
     }
+
     setLocalValues(newValues);
     onInputChange(newValues);
   };
 
   const handleItemChange = (index, e) => {
     const { name, value } = e.target;
+
+    let newValue = value;
+
+    if (name === 'quantity') {
+      newValue = value.replace(/\D/g, '');
+    } else if (name === 'unitPrice') {
+      newValue = value.replace(/[^0-9.,]/g, '');
+    }
+
     const newItems = localValues.items.map((item, i) => {
       if (i === index) {
-        const newItem = { ...item, [name]: value };
+        const newItem = { ...item, [name]: newValue };
 
         const unitPrice = parseFloat(newItem.unitPrice).toFixed(2) || 0;
         const quantity = parseInt(newItem.quantity, 10) || 0;
