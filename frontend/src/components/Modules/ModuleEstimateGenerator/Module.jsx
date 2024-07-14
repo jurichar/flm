@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import FormInputs from './FormInputs';
 import PDFDocument from './PDFDocument';
-import { PDFViewer } from '@react-pdf/renderer';
-import { Typography } from '@material-tailwind/react';
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+import { Button } from '@material-tailwind/react';
 
 const Module = () => {
   const currentDate = new Date();
@@ -80,32 +80,24 @@ const Module = () => {
   );
 
   return (
-    <div className="flex flex-row">
-      <div className="w-2/5 p-1">
+    <div className="flex flex-col md:flex-row justify-between gap-8">
+      <div className="min-w-2/5 p-1">
         <FormInputs
           formValues={bufferedValues}
           onInputChange={handleInputChange}
         />
+        <PDFDownloadLink document={memoizedPDFDocument} fileName="estimate">
+          <Button className="w-full">Download PDF</Button>
+        </PDFDownloadLink>
       </div>
-      {bufferedValues === stableFormValues ? (
-        <PDFViewer
-          showToolbar={false}
-          pageMode="useOutlines"
-          pageLayout="singlePage"
-          height="1080"
-          width="920"
-        >
-          {memoizedPDFDocument}
-        </PDFViewer>
-      ) : (
-        <Typography
-          as="div"
-          className="mb-2 h-2 w-72 rounded-full bg-gray-300"
-          variant="paragraph"
-        >
-          &nbsp;
-        </Typography>
-      )}
+      <PDFViewer
+        className="sticky top-4 w-full"
+        height="700"
+        showToolbar="false"
+        width="full"
+      >
+        {memoizedPDFDocument}
+      </PDFViewer>
     </div>
   );
 };
