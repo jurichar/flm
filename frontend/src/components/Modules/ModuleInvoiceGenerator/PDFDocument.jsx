@@ -189,7 +189,7 @@ const PDFDocument = ({ formValues }) => {
           >
             <Text style={styles.text}>Libelle:</Text>
             <Text style={styles.text}>
-              F{formValues.invoiceNumber}
+              {formValues.invoiceNumber}
               {libelleDate}
             </Text>
           </View>

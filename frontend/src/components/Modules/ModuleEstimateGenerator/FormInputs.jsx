@@ -22,7 +22,7 @@ const FormInputs = ({ formValues, onInputChange }) => {
     const { name, value, checked, type } = e.target;
     let newValue = value;
 
-    if (name === 'estimateNumber' || name === 'clientPostalCode') {
+    if (name === 'clientPostalCode') {
       newValue = value.replace(/\D/g, '');
     }
 
