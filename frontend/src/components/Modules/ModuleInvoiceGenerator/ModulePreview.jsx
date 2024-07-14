@@ -1,6 +1,6 @@
 import { Typography } from '@material-tailwind/react';
 
-const ModuleInvoiceGeneratorPreview = () => {
+const ModuleEstimateGeneratorPreview = () => {
   return (
     <div className="w-full h-full overflow-scroll">
       <Typography className="text-lg" color="blue-gray" variant="paragraph">
@@ -10,4 +10,4 @@ const ModuleInvoiceGeneratorPreview = () => {
   );
 };
 
-export default ModuleInvoiceGeneratorPreview;
+export default ModuleEstimateGeneratorPreview;

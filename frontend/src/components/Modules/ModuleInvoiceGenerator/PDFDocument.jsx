@@ -5,7 +5,7 @@ const PDFDocument = ({ formValues }) => (
   <Document>
     <Page style={styles.page}>
       <View style={styles.section}>
-        <Text style={styles.header}>DEVIS</Text>
+        <Text style={styles.header}>FACTURE</Text>
       </View>
       <View style={styles.addressContainer}>
         <View style={styles.section}>
@@ -34,10 +34,13 @@ const PDFDocument = ({ formValues }) => (
       </View>
       <View style={styles.section}>
         <Text style={styles.text}>
-          Numéro du devis : {formValues.invoiceNumber}
+          Numéro de facture : {formValues.invoiceNumber}
         </Text>
         <Text style={styles.text}>
           Date d&apos;émission : {formValues.issueDate}
+        </Text>
+        <Text style={styles.text}>
+          Date limite de paiement : {formValues.issueDate}
         </Text>
       </View>
       <View style={styles.section}>
@@ -95,6 +98,10 @@ const PDFDocument = ({ formValues }) => (
         </Text>
       </View>
       <View style={styles.divider} />
+      <View style={styles.section}>
+        <Text style={[styles.text, { fontWeight: 'bold' }]}>Description :</Text>
+        <Text style={[styles.text, { fontWeight: 'bold' }]}>Description :</Text>
+      </View>
       <View style={styles.signSection}>
         <Text style={styles.signText}>BON POUR ACCORD</Text>
         <Text style={styles.signText}>Signé le : {formValues.signDate}</Text>
