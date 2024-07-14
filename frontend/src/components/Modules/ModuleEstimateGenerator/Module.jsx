@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import FormInputs from './FormInputs';
 import PDFDocument from './PDFDocument';
 import { PDFViewer } from '@react-pdf/renderer';
@@ -38,8 +38,6 @@ const App = () => {
     items: [],
   });
 
-  const [buffer, setBuffer] = useState(formValues);
-
   const handleInputChange = (newValues) => {
     newValues.totalHT = newValues.items.reduce(
       (sum, item) =>
@@ -56,24 +54,21 @@ const App = () => {
       (sum, item) => sum + parseFloat(item.total || 0),
       0,
     );
-    setBuffer({ ...buffer, ...newValues });
+    setFormValues({ ...newValues });
   };
 
-  const applyChanges = () => {
-    setFormValues(buffer);
-  };
+  const memoizedPDFDocument = useMemo(
+    () => <PDFDocument formValues={formValues} />,
+    [formValues],
+  );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div style={{ width: '40%', padding: '10px' }}>
-        <FormInputs
-          applyChanges={applyChanges}
-          buffer={buffer}
-          onInputChange={handleInputChange}
-        />
+        <FormInputs formValues={formValues} onInputChange={handleInputChange} />
       </div>
       <PDFViewer height="600" width="920">
-        <PDFDocument formValues={formValues} />
+        {memoizedPDFDocument}
       </PDFViewer>
     </div>
   );

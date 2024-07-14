@@ -11,12 +11,12 @@ import {
 } from '@material-tailwind/react';
 import { useEffect, useState } from 'react';
 
-const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
-  const [localValues, setLocalValues] = useState(buffer);
+const FormInputs = ({ formValues, onInputChange }) => {
+  const [localValues, setLocalValues] = useState(formValues);
 
   useEffect(() => {
-    setLocalValues(buffer);
-  }, [buffer]);
+    setLocalValues(formValues);
+  }, [formValues]);
 
   const handleChange = (e) => {
     const { name, value, checked, type } = e.target;
@@ -24,10 +24,6 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
     const newValues = { ...localValues, [name]: newValue };
     setLocalValues(newValues);
     onInputChange(newValues);
-  };
-
-  const handleBlur = () => {
-    applyChanges();
   };
 
   const handleItemChange = (index, e) => {
@@ -49,25 +45,26 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
     onInputChange({ ...localValues, items: newItems });
   };
 
-  const handleItemBlur = () => {
-    applyChanges();
-  };
-
   const handleAddButton = () => {
     const newItems = [
       ...localValues.items,
-      { name: '', details: '', quantity: '', unitPrice: '', total: 0 },
+      {
+        name: '',
+        details: '',
+        quantity: '',
+        unitPrice: '',
+        tva: localValues.TVA,
+        total: 0,
+      },
     ];
     setLocalValues({ ...localValues, items: newItems });
     onInputChange({ ...localValues, items: newItems });
-    applyChanges();
   };
 
   const handleRemoveItem = (index) => {
     const newItems = localValues.items.filter((_, i) => i !== index);
     setLocalValues({ ...localValues, items: newItems });
     onInputChange({ ...localValues, items: newItems });
-    applyChanges();
   };
 
   return (
@@ -86,7 +83,6 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
               <Input
                 label="Estimate Number"
                 name="estimateNumber"
-                onBlur={handleBlur}
                 onChange={handleChange}
                 value={localValues.estimateNumber}
               />
@@ -95,28 +91,24 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
               <Input
                 label="Client Name"
                 name="clientName"
-                onBlur={handleBlur}
                 onChange={handleChange}
                 value={localValues.clientName}
               />
               <Textarea
                 label="Client Address"
                 name="clientAddress"
-                onBlur={handleBlur}
                 onChange={handleChange}
                 value={localValues.clientAddress}
               />
               <Input
                 label="Client Postal Code"
                 name="clientPostalCode"
-                onBlur={handleBlur}
                 onChange={handleChange}
                 value={localValues.clientPostalCode}
               />
               <Input
                 label="Client City"
                 name="clientCity"
-                onBlur={handleBlur}
                 onChange={handleChange}
                 value={localValues.clientCity}
               />
@@ -127,7 +119,6 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
                 onChange={handleChange}
               />
             </Card>
-
             {localValues.items.map((item, index) => (
               <Card className="p-4 flex flex-col gap-4" key={index}>
                 <div className="flex flex-row gap-4">
@@ -141,7 +132,6 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
                   <Input
                     label="Item Name"
                     name="name"
-                    onBlur={handleItemBlur}
                     onChange={(e) => handleItemChange(index, e)}
                     value={item.name}
                   />
@@ -149,21 +139,18 @@ const FormInputs = ({ onInputChange, buffer, applyChanges }) => {
                 <Textarea
                   label="Item Details"
                   name="details"
-                  onBlur={handleItemBlur}
                   onChange={(e) => handleItemChange(index, e)}
                   value={item.details}
                 />
                 <Input
                   label="Item Quantity"
                   name="quantity"
-                  onBlur={handleItemBlur}
                   onChange={(e) => handleItemChange(index, e)}
                   value={item.quantity}
                 />
                 <Input
                   label="Item Unit Price"
                   name="unitPrice"
-                  onBlur={handleItemBlur}
                   onChange={(e) => handleItemChange(index, e)}
                   value={item.unitPrice}
                 />
