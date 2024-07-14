@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import FormInputs from './FormInputs';
 import PDFDocument from './PDFDocument';
 import { PDFViewer } from '@react-pdf/renderer';
@@ -19,7 +19,7 @@ const App = () => {
     year: 'numeric',
   });
 
-  const [formValues, setFormValues] = useState({
+  const [formValues] = useState({
     name: user.name,
     address: user.address,
     postalCode: user.postalCode,
@@ -38,36 +38,55 @@ const App = () => {
     items: [],
   });
 
+  const [bufferedValues, setBufferedValues] = useState(formValues);
+  const [stableFormValues, setStableFormValues] = useState(formValues);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setStableFormValues(bufferedValues);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [bufferedValues]);
+
   const handleInputChange = (newValues) => {
-    newValues.totalHT = newValues.items.reduce(
-      (sum, item) =>
-        sum + parseFloat(item.unitPrice || 0) * parseFloat(item.quantity || 1),
-      0,
-    );
-    newValues.totalTVA = newValues.items.reduce(
-      (sum, item) =>
-        sum +
-        (parseFloat(item.TVA || 0) / 100) * parseFloat(item.unitPrice || 0),
-      0,
-    );
-    newValues.totalTTC = newValues.items.reduce(
-      (sum, item) => sum + parseFloat(item.total || 0),
-      0,
-    );
-    setFormValues({ ...newValues });
+    newValues.totalHT = newValues.items
+      .reduce(
+        (sum, item) =>
+          sum +
+          parseFloat(item.unitPrice || 0) * parseFloat(item.quantity || 1),
+        0,
+      )
+      .toFixed(2);
+    newValues.totalTVA = newValues.items
+      .reduce(
+        (sum, item) =>
+          sum +
+          (parseFloat(newValues.TVA || 0) / 100) *
+            parseFloat(item.unitPrice || 0) *
+            parseFloat(item.quantity || 1),
+        0,
+      )
+      .toFixed(2);
+    newValues.totalTTC = (
+      parseFloat(newValues.totalHT) + parseFloat(newValues.totalTVA)
+    ).toFixed(2);
+    setBufferedValues({ ...newValues });
   };
 
   const memoizedPDFDocument = useMemo(
-    () => <PDFDocument formValues={formValues} />,
-    [formValues],
+    () => <PDFDocument formValues={stableFormValues} />,
+    [stableFormValues],
   );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div style={{ width: '40%', padding: '10px' }}>
-        <FormInputs formValues={formValues} onInputChange={handleInputChange} />
+        <FormInputs
+          formValues={bufferedValues}
+          onInputChange={handleInputChange}
+        />
       </div>
-      <PDFViewer height="600" width="920">
+      <PDFViewer showToolbar="false" height="600" width="920">
         {memoizedPDFDocument}
       </PDFViewer>
     </div>

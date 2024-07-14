@@ -82,7 +82,7 @@ const PDFDocument = ({ formValues }) => (
       </View>
       <View style={styles.summary}>
         <Text style={styles.text}>Total HT: {formValues.totalHT}</Text>
-        <Text style={styles.text}>TVA: {formValues.totalTVA}</Text>
+        <Text style={styles.text}>Total TVA: {formValues.totalTVA}</Text>
         <Text style={styles.text}>Total TTC: {formValues.totalTTC}</Text>
         <Text style={styles.subtext}>
           TVA non applicable, article 293B du CGI

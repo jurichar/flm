@@ -22,6 +22,16 @@ const FormInputs = ({ formValues, onInputChange }) => {
     const { name, value, checked, type } = e.target;
     const newValue = type === 'checkbox' ? (checked ? 10 : 0) : value;
     const newValues = { ...localValues, [name]: newValue };
+    if (name === 'TVA') {
+      const newItems = localValues.items.map((item) => {
+        const unitPrice = parseFloat(item.unitPrice).toFixed(2) || 0;
+        const quantity = parseInt(item.quantity, 10) || 0;
+        const tva = parseFloat(newValue).toFixed(1) || 0;
+        const total = (unitPrice * quantity * (1 + tva / 100)).toFixed(2);
+        return { ...item, total };
+      });
+      newValues.items = newItems;
+    }
     setLocalValues(newValues);
     onInputChange(newValues);
   };
@@ -32,10 +42,10 @@ const FormInputs = ({ formValues, onInputChange }) => {
       if (i === index) {
         const newItem = { ...item, [name]: value };
 
-        const unitPrice = parseFloat(newItem.unitPrice) || 0;
+        const unitPrice = parseFloat(newItem.unitPrice).toFixed(2) || 0;
         const quantity = parseInt(newItem.quantity, 10) || 0;
-        const tva = parseFloat(localValues.TVA) || 0;
-        newItem.total = unitPrice * quantity * (1 + tva / 100);
+        const tva = parseFloat(localValues.TVA).toFixed(1) || 0;
+        newItem.total = (unitPrice * quantity * (1 + tva / 100)).toFixed(2);
 
         return newItem;
       }
@@ -48,14 +58,7 @@ const FormInputs = ({ formValues, onInputChange }) => {
   const handleAddButton = () => {
     const newItems = [
       ...localValues.items,
-      {
-        name: '',
-        details: '',
-        quantity: '',
-        unitPrice: '',
-        tva: localValues.TVA,
-        total: 0,
-      },
+      { name: '', details: '', quantity: '', unitPrice: '', total: 0 },
     ];
     setLocalValues({ ...localValues, items: newItems });
     onInputChange({ ...localValues, items: newItems });
@@ -119,6 +122,7 @@ const FormInputs = ({ formValues, onInputChange }) => {
                 onChange={handleChange}
               />
             </Card>
+
             {localValues.items.map((item, index) => (
               <Card className="p-4 flex flex-col gap-4" key={index}>
                 <div className="flex flex-row gap-4">
