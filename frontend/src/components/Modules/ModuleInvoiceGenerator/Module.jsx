@@ -5,20 +5,15 @@ import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Button } from '@material-tailwind/react';
 
 const Module = () => {
-  const currentDate = new Date();
   const user = {
     name: 'Fred PIERREAFEU',
     address: '1 rue X',
     postalCode: '75000',
     city: 'Paris',
     SIREN: '000000000',
+    BIC: 'CMCIFR00',
+    IBAN: 'FR76 0000 0000 0000 0000 0000 000',
   };
-
-  const formattedDate = currentDate.toLocaleDateString('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
 
   const [formValues] = useState({
     name: user.name,
@@ -26,8 +21,9 @@ const Module = () => {
     postalCode: user.postalCode,
     city: user.city,
     SIREN: user.SIREN,
+    BIC: user.BIC,
+    IBAN: user.IBAN,
     invoiceNumber: 1,
-    issueDate: formattedDate,
     clientName: '',
     clientAddress: '',
     clientPostalCode: '75000',

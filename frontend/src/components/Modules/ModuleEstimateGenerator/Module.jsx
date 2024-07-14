@@ -5,7 +5,6 @@ import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Button } from '@material-tailwind/react';
 
 const Module = () => {
-  const currentDate = new Date();
   const user = {
     name: 'Fred PIERREAFEU',
     address: '1 rue X',
@@ -14,12 +13,6 @@ const Module = () => {
     SIREN: '000000000',
   };
 
-  const formattedDate = currentDate.toLocaleDateString('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
-
   const [formValues] = useState({
     name: user.name,
     address: user.address,
@@ -27,7 +20,6 @@ const Module = () => {
     city: user.city,
     SIREN: user.SIREN,
     estimateNumber: 1,
-    issueDate: formattedDate,
     clientName: '',
     clientAddress: '',
     clientPostalCode: '75000',
