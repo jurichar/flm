@@ -29,19 +29,23 @@ const PDFDocument = ({ formValues }) => (
           <Text style={styles.text}>France</Text>
         </View>
       </View>
-      <View style={styles.section}>
-        <Text style={styles.text}>SIREN : {formValues.SIREN}</Text>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.text}>
-          Numéro de facture : {formValues.invoiceNumber}
-        </Text>
-        <Text style={styles.text}>
-          Date d&apos;émission : {formValues.issueDate}
-        </Text>
-        <Text style={styles.text}>
-          Date limite de paiement : {formValues.issueDate}
-        </Text>
+      <View style={[styles.section, { maxWidth: '40%' }]}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={[styles.text, { marginBottom: 40 }]}>SIREN :</Text>
+          <Text style={styles.text}>{formValues.SIREN}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>Numéro de facture :</Text>
+          <Text style={styles.text}>{formValues.invoiceNumber}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>Date d&apos;émission :</Text>
+          <Text style={styles.text}>{formValues.issueDate}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>Date limite de paiement :</Text>
+          <Text style={styles.text}>{formValues.issueDate}</Text>
+        </View>
       </View>
       <View style={styles.section}>
         <Text style={[styles.text, { fontWeight: 'bold' }]}>Description :</Text>
@@ -88,40 +92,57 @@ const PDFDocument = ({ formValues }) => (
         </View>
       </View>
       <View style={styles.summary}>
-        <Text style={styles.text}>Total HT: {formValues.totalHT} €</Text>
-        <Text style={styles.text}>Total TVA: {formValues.totalTVA} €</Text>
-        <Text style={[styles.text, { fontWeight: 'bold' }]}>
-          Total TTC: {formValues.totalTTC} €
-        </Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>Total HT:</Text>
+          <Text style={styles.text}>{formValues.totalHT} €</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>Total TVA: </Text>
+          <Text style={styles.text}>{formValues.totalTVA} €</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={[styles.text, { fontWeight: 'bold' }]}>Total TTC:</Text>
+          <Text style={[styles.text, { fontWeight: 'bold' }]}>
+            {formValues.totalTTC} €
+          </Text>
+        </View>
         <Text style={styles.subtext}>
           TVA non applicable, article 293B du CGI
         </Text>
       </View>
       <View style={styles.divider} />
-      <View style={styles.section}>
-        <Text style={[styles.text, { fontWeight: 'bold' }]}>Description :</Text>
-        <Text style={[styles.text, { fontWeight: 'bold' }]}>Description :</Text>
+      <View style={[styles.section, { width: '30%' }]}>
+        <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 20 }]}>
+          Informations de paiement
+        </Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>BIC:</Text>
+          <Text style={styles.text}>0000</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>IBAN:</Text>
+          <Text style={styles.text}>0000</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>Libelle:</Text>
+          <Text style={styles.text}>0000</Text>
+        </View>
+        <Text style={styles.subtext}>
+          A utiliser comme libelle lors de votre virement pour identifier la
+          transaction
+        </Text>
       </View>
-      <View style={styles.signSection}>
-        <Text style={styles.signText}>BON POUR ACCORD</Text>
-        <Text style={styles.signText}>Signé le : {formValues.signDate}</Text>
-        <Text style={styles.signText}>À : {formValues.signLocation}</Text>
-      </View>
+      <View style={styles.divider} />
       <View style={styles.footer}>
         <Text>
-          MONSIEUR {formValues.name} vous a envoyé ce devis le{' '}
+          MONSIEUR {formValues.name} vous a envoyé cette facture le{' '}
           {formValues.issueDate}.
         </Text>
         <Text>
-          Ce devis doit être accepté dans un délai de 15 jours à compter de
-          cette date. Passé ce délai, il sera nécessaire de demander un nouveau
-          devis.
-        </Text>
-        <Text>
-          À noter qu&apos;aucune pénalité de retard ni indemnité de recouvrement
-          ne s&apos;appliquent à ce devis, mais elles seront applicables aux
-          factures émises suite à l&apos;acceptation de ce devis. Aucun escompte
-          pour paiement anticipé ne sera accordé.
+          Celle-ci doit être réglée sous 15 jour(s) a compter de cette date.
+          Passé ce délai, une pénalité de retard de 3 % sera appliquée, ainsi
+          qu&apos;une indemnité forfaitaire de 40 € due au titre des frais de
+          recouvrement. Pas d&apos;escompte pour règlement anticipe.
         </Text>
       </View>
     </Page>

@@ -29,16 +29,19 @@ const PDFDocument = ({ formValues }) => (
           <Text style={styles.text}>France</Text>
         </View>
       </View>
-      <View style={styles.section}>
-        <Text style={styles.text}>SIREN : {formValues.SIREN}</Text>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.text}>
-          Numéro du devis : {formValues.invoiceNumber}
-        </Text>
-        <Text style={styles.text}>
-          Date d&apos;émission : {formValues.issueDate}
-        </Text>
+      <View style={[styles.section, { maxWidth: '40%' }]}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={[styles.text, { marginBottom: 40 }]}>SIREN :</Text>
+          <Text style={styles.text}>{formValues.SIREN}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>Numéro du devis :</Text>
+          <Text style={styles.text}>{formValues.estimateNumber}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>Date d&apos;émission :</Text>
+          <Text style={styles.text}>{formValues.issueDate}</Text>
+        </View>
       </View>
       <View style={styles.section}>
         <Text style={[styles.text, { fontWeight: 'bold' }]}>Description :</Text>
@@ -85,11 +88,20 @@ const PDFDocument = ({ formValues }) => (
         </View>
       </View>
       <View style={styles.summary}>
-        <Text style={styles.text}>Total HT: {formValues.totalHT} €</Text>
-        <Text style={styles.text}>Total TVA: {formValues.totalTVA} €</Text>
-        <Text style={[styles.text, { fontWeight: 'bold' }]}>
-          Total TTC: {formValues.totalTTC} €
-        </Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>Total HT:</Text>
+          <Text style={styles.text}>{formValues.totalHT} €</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text}>Total TVA: </Text>
+          <Text style={styles.text}>{formValues.totalTVA} €</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={[styles.text, { fontWeight: 'bold' }]}>Total TTC:</Text>
+          <Text style={[styles.text, { fontWeight: 'bold' }]}>
+            {formValues.totalTTC} €
+          </Text>
+        </View>
         <Text style={styles.subtext}>
           TVA non applicable, article 293B du CGI
         </Text>

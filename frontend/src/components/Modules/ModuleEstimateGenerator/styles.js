@@ -112,9 +112,11 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   summary: {
+    display: 'flex',
     marginTop: 10,
     marginBottom: 10,
-    textAlign: 'right',
+    maxWidth: '40%',
+    alignSelf: 'flex-end',
   },
   boldText: {
     fontWeight: 'bold',

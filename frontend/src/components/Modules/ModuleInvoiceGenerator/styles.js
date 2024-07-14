@@ -115,6 +115,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     textAlign: 'right',
+    maxWidth: '40%',
+    alignSelf: 'flex-end',
   },
   boldText: {
     fontWeight: 'bold',
