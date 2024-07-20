@@ -1,9 +1,9 @@
 import { useParams, Navigate } from 'react-router-dom';
-import ModuleInvoice from '../../components/Modules/ModuleInvoice/Module';
-import ModuleEstimate from '../../components/Modules/ModuleEstimate/Module';
-import ModuleCalculator from '../../components/Modules/ModuleCalculator/Module';
-import ModuleEstimateGenerator from '../../components/Modules/ModuleEstimateGenerator/Module';
-import ModuleInvoiceGenerator from '../../components/Modules/ModuleInvoiceGenerator/Module';
+import ModuleInvoice from '../components/Modules/ModuleInvoice/Module';
+import ModuleEstimate from '../components/Modules/ModuleEstimate/Module';
+import ModuleCalculator from '../components/Modules/ModuleCalculator/Module';
+import ModuleEstimateGenerator from '../components/Modules/ModuleEstimateGenerator/Module';
+import ModuleInvoiceGenerator from '../components/Modules/ModuleInvoiceGenerator/Module';
 
 const modulesMap = {
   Invoice: ModuleInvoice,

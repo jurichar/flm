@@ -1,4 +1,4 @@
-import ModuleCard from '../../components/Modules/ModuleCard';
+import ModuleCard from '../components/Modules/ModuleCard';
 
 const HomePage = ({ userModules, hasAccess }) => {
   return (
