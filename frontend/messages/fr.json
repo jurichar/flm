@@ -1,0 +1,18 @@
+{
+  "AppLayout": {
+    "home": "Accueil",
+    "logout": "Déconnexion",
+    "profile": "Profil"
+  },
+  "HomePage": {
+    "title": "Accueil"
+  },
+  "LocaleSwitcher": {
+    "fr": "Français",
+    "en": "English",
+    "label": "Langue"
+  },
+  "ProfilePage": {
+    "title": "Profile"
+  }
+}

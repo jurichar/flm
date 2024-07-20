@@ -1,11 +1,12 @@
 'use client';
 
-import modulePreviews from '@/utils/modulePreviews';
-import { Card } from '@material-tailwind/react';
-import { redirect, useRouter } from 'next/navigation';
+import modulePreviews from "@/src/utils/modulePreviews";
+import { Card } from "@material-tailwind/react";
+import { redirect } from "next/navigation";
 
-const ModuleCard = ({ moduleName }) => {
-  const handleCardClick = (event) => {
+
+const ModuleCard = ({ moduleName }: { moduleName: string }) => {
+  const handleCardClick = (event: any) => {
     if (event.target.tagName !== 'INPUT') {
       redirect(`/module/${moduleName}`);
     }
