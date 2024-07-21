@@ -1,3 +1,5 @@
+// src/components/LocaleSwitcherSelect.jsx
+
 'use client';
 
 import { useState } from 'react';
