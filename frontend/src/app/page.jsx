@@ -1,6 +1,5 @@
 // src/app/page.js
 
-import LocaleSwitcher from '@/components/LocaleSwitcher';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 

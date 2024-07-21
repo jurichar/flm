@@ -1,8 +1,8 @@
 // src/service/locale.js :
 'use server';
 
-import { defaultLocale } from '@/config';
 import { cookies } from 'next/headers';
+import { defaultLocale } from '../config';
 
 const COOKIE_NAME = 'NEXT_LOCALE';
 
