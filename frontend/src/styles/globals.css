@@ -1,7 +1,88 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Reset box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-:root {
-  background-color: rgb(211, 214, 224);
+/* Remove margin and padding from body */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Set default font family and size */
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}
+
+/* Set default styles for links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button,
+input,
+textarea {
+  border: none;
+  outline: none;
+}
+
+button:focus,
+input:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+button {
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin: 0.5rem 0;
+}
+
+
+a:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #007bff;
 }

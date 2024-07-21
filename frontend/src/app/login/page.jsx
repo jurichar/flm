@@ -6,64 +6,86 @@ import { Card, Input, Button, Typography } from '@material-tailwind/react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useAuth } from '../../lib/auth';
 
 const LoginPage = () => {
   const t = useTranslations('LoginPage');
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const { signIn } = useAuth();
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-
-    // onLogin();
-    router.push('/');
+    const result = await signIn('credentials', {
+      redirect: false,
+      username,
+      password,
+    });
+    if (!result.error) {
+      router.push('/');
+    } else {
+      console.error('Login error:', result.error);
+    }
   };
 
   return (
-    <Card color="transparent" shadow={false}>
-      <Typography color="blue-gray" className="font-normal text-2xl">
-        {t('title')}
-      </Typography>
-      <Typography className="mt-1 font-normal text-xl" color="gray">
-        {t('welcome')}
-      </Typography>
-      <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-        <div className="mb-1 flex flex-col gap-6">
-          <Typography className="-mb-3 text-lg" color="blue-gray" variant="h6">
-            {t('email')}
-          </Typography>
-          <Input
-            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-            labelProps={{
-              className: 'before:content-none after:content-none',
-            }}
-            placeholder="name@mail.com"
-            size="lg"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Typography className="-mb-3 text-lg" color="blue-gray" variant="h6">
-            {t('password')}
-          </Typography>
-          <Input
-            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-            labelProps={{
-              className: 'before:content-none after:content-none',
-            }}
-            placeholder="********"
-            size="lg"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <Button className="mt-6" fullWidth onClick={handleLogin}>
-          {t('signIn')}
-        </Button>
-      </form>
-    </Card>
+    <div className="flex items-center justify-center h-full">
+      <Card shadow={false} className="m-4 p-4">
+        <Typography color="blue-gray" className="font-normal text-2xl">
+          {t('title')}
+        </Typography>
+        <Typography className="mt-1 font-normal text-xl" color="gray">
+          {t('welcome')}
+        </Typography>
+        <form
+          className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
+          onSubmit={handleLogin}
+        >
+          <div className="mb-1 flex flex-col gap-6">
+            <Typography
+              className="-mb-3 text-lg"
+              color="blue-gray"
+              variant="h6"
+            >
+              {t('username')}
+            </Typography>
+            <Input
+              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: 'before:content-none after:content-none',
+              }}
+              placeholder="username"
+              size="lg"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Typography
+              className="-mb-3 text-lg"
+              color="blue-gray"
+              variant="h6"
+            >
+              {t('password')}
+            </Typography>
+            <Input
+              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: 'before:content-none after:content-none',
+              }}
+              placeholder="********"
+              size="lg"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <Button className="mt-6" fullWidth type="submit">
+            {t('signIn')}
+          </Button>
+        </form>
+      </Card>
+    </div>
   );
 };
 

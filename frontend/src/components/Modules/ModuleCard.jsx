@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 const ModuleCard = ({ name, description, link }) => {
   return (
-    <Card key={name} className="w-auto p-4 h-80 text-xl">
+    <Card className="w-auto p-4 h-80 text-xl">
       <h2>{name}</h2>
       <p>{description}</p>
       <Link href={`/modules/${link}`}>

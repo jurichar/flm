@@ -16,7 +16,7 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
-import LocaleSwitcher from '../LocaleSwitcher';
+import LocaleSwitcher from '../Shared/LocaleSwitcher';
 // import ModalSettings from '../Settings/ModalSettings';
 
 const NavList = () => {
