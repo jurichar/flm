@@ -1,3 +1,7 @@
+// src/app/modules/estimate/page.jsx
+
+'use client';
+
 import { List, ListItem, Typography, Chip } from '@material-tailwind/react';
 
 const ModuleEstimate = () => {

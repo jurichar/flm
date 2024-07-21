@@ -1,15 +1,21 @@
 // src/app/login/page.jsx
+
 'use client';
 
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const LoginPage = () => {
   const t = useTranslations('LoginPage');
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = (event) => {
+    event.preventDefault();
+
     // onLogin();
     router.push('/');
   };
@@ -34,6 +40,9 @@ const LoginPage = () => {
             }}
             placeholder="name@mail.com"
             size="lg"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <Typography className="-mb-3 text-lg" color="blue-gray" variant="h6">
             {t('password')}
@@ -46,6 +55,8 @@ const LoginPage = () => {
             placeholder="********"
             size="lg"
             type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <Button className="mt-6" fullWidth onClick={handleLogin}>

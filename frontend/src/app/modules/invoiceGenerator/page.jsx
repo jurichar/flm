@@ -1,3 +1,7 @@
+// src/app/modules/invoiceGenerator/page.jsx
+
+'use client';
+
 import { useState, useMemo, useEffect } from 'react';
 import FormInputs from './FormInputs';
 import PDFDocument from './PDFDocument';
@@ -11,6 +15,8 @@ const Module = () => {
     postalCode: '75000',
     city: 'Paris',
     SIREN: '000000000',
+    BIC: 'CMCIFR00',
+    IBAN: 'FR76 0000 0000 0000 0000 0000 000',
   };
 
   const [formValues] = useState({
@@ -19,15 +25,17 @@ const Module = () => {
     postalCode: user.postalCode,
     city: user.city,
     SIREN: user.SIREN,
-    estimateNumber: 1,
+    BIC: user.BIC,
+    IBAN: user.IBAN,
+    invoiceNumber: 1,
     clientName: '',
     clientAddress: '',
     clientPostalCode: '75000',
     clientCity: 'Paris',
     TVA: 0,
-    totalHT: 0,
-    totalTVA: 0,
-    totalTTC: 0,
+    totalHT: 0.0,
+    totalTVA: 0.0,
+    totalTTC: 0.0,
     items: [],
   });
 
@@ -78,7 +86,7 @@ const Module = () => {
           formValues={bufferedValues}
           onInputChange={handleInputChange}
         />
-        <PDFDownloadLink document={memoizedPDFDocument} fileName="estimate">
+        <PDFDownloadLink document={memoizedPDFDocument} fileName="invoice">
           <Button className="w-full">Download PDF</Button>
         </PDFDownloadLink>
       </div>

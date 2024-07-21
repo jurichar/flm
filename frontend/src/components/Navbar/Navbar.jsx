@@ -1,3 +1,7 @@
+// src/components/Navbar/Navbar.jsx
+
+'use client';
+
 import { useEffect, useState } from 'react';
 import {
   Navbar,
@@ -5,14 +9,15 @@ import {
   Typography,
   IconButton,
 } from '@material-tailwind/react';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBars,
   faRightFromBracket,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import ModalSettings from '../Settings/ModalSettings';
+import Link from 'next/link';
+import LocaleSwitcher from '../LocaleSwitcher';
+// import ModalSettings from '../Settings/ModalSettings';
 
 const NavList = () => {
   return (
@@ -23,7 +28,7 @@ const NavList = () => {
         color="blue-gray"
         variant="small"
       >
-        <ModalSettings />
+        <LocaleSwitcher />
       </Typography>
       <Typography
         as="li"
@@ -31,10 +36,7 @@ const NavList = () => {
         color="blue-gray"
         variant="small"
       >
-        <Link
-          className="flex items-center hover:text-blue-500 transition-colors"
-          to="/account"
-        >
+        <Link href="/login">
           <FontAwesomeIcon icon={faRightFromBracket} />
         </Link>
       </Typography>
@@ -63,7 +65,7 @@ export const NavbarSimple = () => {
           <Typography
             as={Link}
             className="mr-4 cursor-pointer py-1.5 text-md"
-            to="/"
+            href="/"
           >
             MyFree
           </Typography>

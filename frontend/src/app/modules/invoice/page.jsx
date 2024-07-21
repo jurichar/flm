@@ -1,3 +1,7 @@
+// src/app/modules/invoice/page.jsx
+
+'use client';
+
 const ModuleInvoice = () => {
   return (
     <div>

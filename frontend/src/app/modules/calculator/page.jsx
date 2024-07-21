@@ -1,3 +1,7 @@
+// src/app/modules/calculator/page.jsx
+
+'use client';
+
 import { useState } from 'react';
 import { Input, Typography, Chip } from '@material-tailwind/react';
 
