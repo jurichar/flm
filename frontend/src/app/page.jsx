@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import LocaleSwitcher from '../components/LocaleSwitcher';
 
 export default function Home() {
   const t = useTranslations('HomePage');

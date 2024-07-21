@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTransition } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLanguage, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { setUserLocale } from '@/service/locale';
+import { setUserLocale } from '../service/locale';
 
 export default function LocaleSwitcherSelect({ defaultValue, items, label }) {
   const [isPending, startTransition] = useTransition();

@@ -14,5 +14,18 @@
   },
   "ProfilePage": {
     "title": "Profile"
+  },
+  "LoginPage": {
+    "welcome": "Bienvenue",
+    "signIn": "Se connecter",
+    "credentials": "Identifiants:",
+    "description": "Veuillez entrer vos informations.",
+    "email": "Email",
+    "invalidCredentials": "Veuillez vérifier vos identifiants.",
+    "invalidEmail": "Veuillez entrer une adresse email valide.",
+    "invalidPassword": "Veuillez entrer un mot de passe.",
+    "login": "Se connecter",
+    "password": "Mot de passe",
+    "title": "Bienvenue"
   }
 }
