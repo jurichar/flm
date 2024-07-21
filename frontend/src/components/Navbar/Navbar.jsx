@@ -8,6 +8,7 @@ import {
   Collapse,
   Typography,
   IconButton,
+  Button,
 } from '@material-tailwind/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -18,6 +19,7 @@ import {
 import Link from 'next/link';
 import LocaleSwitcher from '../Shared/LocaleSwitcher';
 // import ModalSettings from '../Settings/ModalSettings';
+import { signOut, useSession } from 'next-auth/react';
 
 const NavList = () => {
   return (
@@ -36,9 +38,12 @@ const NavList = () => {
         color="blue-gray"
         variant="small"
       >
-        <Link href="/login">
+        <Button
+          onClick={() => signOut()}
+          className="flex items-center hover:text-blue-500 transition-colors"
+        >
           <FontAwesomeIcon icon={faRightFromBracket} />
-        </Link>
+        </Button>
       </Typography>
     </ul>
   );
@@ -46,51 +51,59 @@ const NavList = () => {
 
 export const NavbarSimple = () => {
   const [openNav, setOpenNav] = useState(false);
+  const { data: session, status } = useSession();
 
   const handleWindowResize = () =>
     window.innerWidth >= 960 && setOpenNav(false);
 
   useEffect(() => {
     window.addEventListener('resize', handleWindowResize);
-
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
   }, []);
 
+  if (status === 'unauthenticated') {
+    return null;
+  }
+
+  console.log('session', session);
+
   return (
-    <Navbar className="min-w-full px-6 py-3 mb-4">
-      <div className="flex items-center justify-between text-blue-gray-900">
-        <div className="flex">
-          <Typography
-            as={Link}
-            className="mr-4 cursor-pointer py-1.5 text-md"
-            href="/"
+    status === 'authenticated' && (
+      <Navbar className="min-w-full px-6 py-3 mb-4">
+        <div className="flex items-center justify-between text-blue-gray-900">
+          <div className="flex">
+            <Typography
+              as={Link}
+              className="mr-4 cursor-pointer py-1.5 text-md"
+              href="/"
+            >
+              MyFree
+            </Typography>
+            <Typography className="border-black border-l-2 px-4 cursor-pointer py-1.5 text-md">
+              {session ? session.user.name : 'Guest'}
+            </Typography>
+          </div>
+          <div className="hidden lg:block">
+            <NavList />
+          </div>
+          <IconButton
+            className="text-xl ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+            onClick={() => setOpenNav(!openNav)}
+            variant="text"
           >
-            MyFree
-          </Typography>
-          <Typography className="border-black border-l-2 px-4 cursor-pointer py-1.5 text-md">
-            Joe Doe
-          </Typography>
+            {openNav ? (
+              <FontAwesomeIcon icon={faXmark} />
+            ) : (
+              <FontAwesomeIcon icon={faBars} />
+            )}
+          </IconButton>
         </div>
-        <div className="hidden lg:block">
+        <Collapse open={openNav}>
           <NavList />
-        </div>
-        <IconButton
-          className="text-xl ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
-          onClick={() => setOpenNav(!openNav)}
-          variant="text"
-        >
-          {openNav ? (
-            <FontAwesomeIcon icon={faXmark} />
-          ) : (
-            <FontAwesomeIcon icon={faBars} />
-          )}
-        </IconButton>
-      </div>
-      <Collapse open={openNav}>
-        <NavList />
-      </Collapse>
-    </Navbar>
+        </Collapse>
+      </Navbar>
+    )
   );
 };

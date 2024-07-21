@@ -20,7 +20,12 @@ const handler = NextAuth({
           });
 
           if (res.data) {
-            return { ...res.data, user: { name: credentials.username } };
+            return {
+              ...res.data,
+              user: {
+                name: credentials.username,
+              },
+            };
           }
         } catch (error) {
           console.error('Auth error:', error);
@@ -34,12 +39,14 @@ const handler = NextAuth({
       if (user) {
         token.accessToken = user.access;
         token.refreshToken = user.refresh;
+        token.user = user.user;
       }
       return token;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
+      session.user = token.user;
       return session;
     },
   },

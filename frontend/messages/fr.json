@@ -26,6 +26,7 @@
     "invalidPassword": "Veuillez entrer un mot de passe.",
     "login": "Se connecter",
     "password": "Mot de passe",
-    "title": "Bienvenue"
+    "title": "Bienvenue",
+    "username": "Nom d'utilisateur"
   }
 }

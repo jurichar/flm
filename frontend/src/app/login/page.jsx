@@ -2,10 +2,10 @@
 
 'use client';
 
+import { useState } from 'react';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { useAuth } from '../../lib/auth';
 
 const LoginPage = () => {
@@ -13,6 +13,7 @@ const LoginPage = () => {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const { signIn } = useAuth();
 
   const handleLogin = async (event) => {
@@ -25,8 +26,18 @@ const LoginPage = () => {
     if (!result.error) {
       router.push('/');
     } else {
-      console.error('Login error:', result.error);
+      setError(result.error);
     }
+  };
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    setError('');
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    setError('');
   };
 
   return (
@@ -51,7 +62,7 @@ const LoginPage = () => {
               {t('username')}
             </Typography>
             <Input
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              className="!border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: 'before:content-none after:content-none',
               }}
@@ -59,7 +70,7 @@ const LoginPage = () => {
               size="lg"
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={handleUsernameChange}
             />
             <Typography
               className="-mb-3 text-lg"
@@ -69,7 +80,7 @@ const LoginPage = () => {
               {t('password')}
             </Typography>
             <Input
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              className="!border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: 'before:content-none after:content-none',
               }}
@@ -77,9 +88,14 @@ const LoginPage = () => {
               size="lg"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
             />
           </div>
+          {error && (
+            <Typography color="red" className="mt-2 text-center text-lg">
+              {error}
+            </Typography>
+          )}
           <Button className="mt-6" fullWidth type="submit">
             {t('signIn')}
           </Button>
