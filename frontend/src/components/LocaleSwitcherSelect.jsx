@@ -32,7 +32,7 @@ export default function LocaleSwitcherSelect({ defaultValue, items, label }) {
         <FontAwesomeIcon icon={faLanguage} className="h-6 w-6 text-slate-600" />
       </button>
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <div className="absolute right-0 mt-2 w-48 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
           <div className="py-1">
             {items.map((item) => (
               <button

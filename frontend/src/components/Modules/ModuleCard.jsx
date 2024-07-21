@@ -1,30 +1,18 @@
-import { Card } from '@material-tailwind/react';
-import { useNavigate } from 'react-router-dom';
-import modulePreviews from '../../../utils/modulePreviews';
+// src/components/Modules/ModuleCard.jsx
 
-const ModuleCard = ({ moduleName, hasAccess }) => {
-  const navigate = useNavigate();
+'use client';
 
-  const handleCardClick = (event) => {
-    if (event.target.tagName !== 'INPUT') {
-      navigate(`/module/${moduleName}`);
-    }
-  };
+import { Button, Card } from '@material-tailwind/react';
+import Link from 'next/link';
 
-  const PreviewComponent = modulePreviews[moduleName];
-
+const ModuleCard = ({ name, description, link }) => {
   return (
-    <Card className="w-auto p-4 h-80 text-xl" onClick={handleCardClick}>
-      <h3>{moduleName}</h3>
-      {hasAccess(moduleName) ? (
-        PreviewComponent ? (
-          <PreviewComponent />
-        ) : (
-          <p>Component not found</p>
-        )
-      ) : (
-        <p>Module preview unavailable</p>
-      )}
+    <Card key={name} className="w-auto p-4 h-80 text-xl">
+      <h2>{name}</h2>
+      <p>{description}</p>
+      <Link href={`/modules/${link}`}>
+        <Button className="mt-4">Go to {name}</Button>
+      </Link>
     </Card>
   );
 };

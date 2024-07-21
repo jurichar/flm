@@ -59,7 +59,7 @@ const ModuleCalculator = () => {
         <Typography color="blue-gray" variant="h4">
           Calculateur de revenus:
         </Typography>
-        <switchButton />
+        {/* <switchButton /> */}
       </div>
       <div className="mb-4">
         <Input

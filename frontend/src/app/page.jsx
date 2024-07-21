@@ -1,29 +1,51 @@
 // src/app/page.js
 
+'use client';
+
+import { Button, Card } from '@material-tailwind/react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import ModuleCard from '../components/Modules/ModuleCard';
 
 export default function Home() {
   const t = useTranslations('HomePage');
   const modules = [
     {
-      name: 'module1',
+      name: 'calculator',
       description: 'Module 1 description',
+      link: 'calculator',
     },
     {
-      name: 'module2',
+      name: 'invoice',
       description: 'Module 2 description',
+      link: 'invoice',
+    },
+    {
+      name: 'estimate',
+      description: 'Module 2 description',
+      link: 'estimate',
+    },
+    {
+      name: 'invoice_generator',
+      description: 'Module 2 description',
+      link: 'invoiceGenerator',
+    },
+    {
+      name: 'estimate generator',
+      description: 'Module 2 description',
+      link: 'estimateGenerator',
     },
   ];
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
+      <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-w-full">
         {modules.map((mod) => (
-          <div key={mod.name}>
-            <h2>{mod.name}</h2>
-            <p>{mod.description}</p>
-            <Link href={`/modules/${mod.name}`}>Go to {mod.name}</Link>
-          </div>
+          <ModuleCard
+            key={mod.name}
+            name={mod.name}
+            description={mod.description}
+            link={mod.link}
+          />
         ))}
       </div>
     </main>
