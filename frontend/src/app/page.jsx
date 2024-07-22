@@ -4,7 +4,6 @@
 
 import { useTranslations } from 'next-intl';
 import ModuleCard from '../components/Modules/ModuleCard';
-import ProtectedRoute from '../components/Auth/ProtectedRoute';
 
 export default function Home() {
   const t = useTranslations('HomePage');
@@ -36,19 +35,17 @@ export default function Home() {
     },
   ];
   return (
-    <ProtectedRoute>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-w-full">
-          {modules.map((mod, index) => (
-            <ModuleCard
-              key={index}
-              name={mod.name}
-              description={mod.description}
-              link={mod.link}
-            />
-          ))}
-        </div>
-      </main>
-    </ProtectedRoute>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-w-full">
+        {modules.map((mod, index) => (
+          <ModuleCard
+            key={index}
+            name={mod.name}
+            description={mod.description}
+            link={mod.link}
+          />
+        ))}
+      </div>
+    </main>
   );
 }

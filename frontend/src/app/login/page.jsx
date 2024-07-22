@@ -5,33 +5,36 @@
 import { useState } from 'react';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '../../lib/auth';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import LocalSwitcher from '../../components/Shared/LocaleSwitcher';
 
 const LoginPage = () => {
-  const t = useTranslations('LoginPage');
+  const t = useTranslations('login');
   const router = useRouter();
-  const [username, setUsername] = useState('');
+  const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { signIn } = useAuth();
+  const searchParams = useSearchParams();
 
   const handleLogin = async (event) => {
     event.preventDefault();
+    const callbackUrl = searchParams.get('callbackUrl') || '/';
     const result = await signIn('credentials', {
       redirect: false,
-      username,
+      login,
       password,
+      callbackUrl,
     });
     if (!result.error) {
-      router.push('/');
+      router.push(callbackUrl);
     } else {
       setError(result.error);
     }
   };
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+  const handleLoginChange = (e) => {
+    setLogin(e.target.value);
     setError('');
   };
 
@@ -42,12 +45,12 @@ const LoginPage = () => {
 
   return (
     <div className="flex items-center justify-center h-full">
+      <div className="fixed top-4 right-4">
+        <LocalSwitcher />
+      </div>
       <Card shadow={false} className="m-4 p-4">
         <Typography color="blue-gray" className="font-normal text-2xl">
           {t('title')}
-        </Typography>
-        <Typography className="mt-1 font-normal text-xl" color="gray">
-          {t('welcome')}
         </Typography>
         <form
           className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
@@ -59,18 +62,18 @@ const LoginPage = () => {
               color="blue-gray"
               variant="h6"
             >
-              {t('username')}
+              {t('login')}
             </Typography>
             <Input
               className="!border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: 'before:content-none after:content-none',
               }}
-              placeholder="username"
+              placeholder="login"
               size="lg"
               type="text"
-              value={username}
-              onChange={handleUsernameChange}
+              value={login}
+              onChange={handleLoginChange}
             />
             <Typography
               className="-mb-3 text-lg"
@@ -97,7 +100,7 @@ const LoginPage = () => {
             </Typography>
           )}
           <Button className="mt-6" fullWidth type="submit">
-            {t('signIn')}
+            {t('login')}
           </Button>
         </form>
       </Card>
