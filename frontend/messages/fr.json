@@ -15,7 +15,7 @@
   "ProfilePage": {
     "title": "Profile"
   },
-  "LoginPage": {
+  "login": {
     "welcome": "Bienvenue",
     "signIn": "Se connecter",
     "credentials": "Identifiants:",

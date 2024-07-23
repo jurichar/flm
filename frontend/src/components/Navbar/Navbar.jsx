@@ -67,8 +67,6 @@ export const NavbarSimple = () => {
     return null;
   }
 
-  console.log('session', session);
-
   return (
     status === 'authenticated' && (
       <Navbar className="min-w-full px-6 py-3 mb-4">
@@ -82,7 +80,7 @@ export const NavbarSimple = () => {
               MyFree
             </Typography>
             <Typography className="border-black border-l-2 px-4 cursor-pointer py-1.5 text-md">
-              {session ? session.user.name : 'Guest'}
+              Hello {session ? session.user.login : 'Guest'}
             </Typography>
           </div>
           <div className="hidden lg:block">

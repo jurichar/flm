@@ -12,7 +12,7 @@
     "en": "English",
     "label": "Language"
   },
-  "LoginPage": {
+  "login": {
     "welcome": "Welcome",
     "signIn": "Sign in",
     "credentials": "Credentials: jane@doe.com / next-intl",

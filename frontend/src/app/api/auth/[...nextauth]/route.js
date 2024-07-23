@@ -22,6 +22,7 @@ const handler = NextAuth({
           });
 
           const decoded = jwtDecode(res.data.access);
+          console.log('Decoded:', decoded);
 
           if (res.data) {
             return {
