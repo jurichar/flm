@@ -12,7 +12,8 @@ import apiClient from '../../../utils/apiClient';
 const Module = () => {
   const { data: session } = useSession();
   const [formValues, setFormValues] = useState({
-    name: 'j',
+    first_name: '',
+    name: '',
     address: '',
     postalCode: '',
     city: '',
@@ -49,13 +50,14 @@ const Module = () => {
           console.log('User data login:', userData);
           setBufferedValues((prevValues) => ({
             ...prevValues,
-            name: userData?.login || prevValues.name,
-            address: userData.address || prevValues.address,
-            postalCode: userData.postalCode || prevValues.postalCode,
-            city: userData.city || prevValues.city,
-            siren: userData.siren || prevValues.siren,
-            bic: userData.bic || prevValues.bic,
-            iban: userData.iban || prevValues.iban,
+            first_name: userData.first_name,
+            name: userData.name,
+            address: userData.address,
+            postalCode: userData.postalCode,
+            city: userData.city,
+            siren: userData.siren,
+            bic: userData.bic,
+            iban: userData.iban,
           }));
         } catch (error) {
           console.error('Error fetching user data:', error);

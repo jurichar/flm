@@ -4,21 +4,16 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import {
-  Input,
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-} from '@material-tailwind/react';
+import { Input, Button, Card } from '@material-tailwind/react';
 import apiClient from '../../utils/apiClient';
 
 const UserProfile = () => {
   const { data: session } = useSession();
   const [userProfile, setUserProfile] = useState({
     name: '',
+    first_name: '',
     address: '',
-    postalCode: '',
+    postal_code: '',
     city: '',
     siren: '',
     bic: '',
@@ -32,16 +27,12 @@ const UserProfile = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      const response = await apiClient.patch(
+      await apiClient.patch(
         `/api/user/update/${session.user.uid}/`,
         userProfile,
       );
-      if (response.status === 200) {
-        alert('Profile updated successfully!');
-      }
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('Failed to update profile');
     }
   };
 
@@ -52,9 +43,10 @@ const UserProfile = () => {
           `/api/user/retrieve/${session.user.uid}/`,
         );
         setUserProfile({
-          name: response.login,
+          name: response.name,
+          first_name: response.first_name,
           address: response.address,
-          postalCode: response.postalCode,
+          postal_code: response.postal_code,
           city: response.city,
           siren: response.siren,
           bic: response.bic,
@@ -71,97 +63,78 @@ const UserProfile = () => {
   }, [session]);
 
   return (
-    <div className="p-4">
-      <Card>
-        <CardHeader color="purple" contentPosition="left">
-          <h2 className="text-white text-2xl">User Profile</h2>
-        </CardHeader>
-        <CardBody>
-          <form>
-            <Input
-              type="text"
-              color="purple"
-              size="lg"
-              outline={true}
-              placeholder="Name"
-              name="name"
-              value={userProfile.name || ''}
-              onChange={handleInputChange}
-            />
-            <Input
-              type="text"
-              color="purple"
-              size="lg"
-              outline={true}
-              placeholder="Address"
-              name="address"
-              value={userProfile.address || ''}
-              onChange={handleInputChange}
-            />
-            <Input
-              type="text"
-              color="purple"
-              size="lg"
-              outline={true}
-              placeholder="Postal Code"
-              name="postalCode"
-              value={userProfile.postalCode || ''}
-              onChange={handleInputChange}
-            />
-            <Input
-              type="text"
-              color="purple"
-              size="lg"
-              outline={true}
-              placeholder="City"
-              name="city"
-              value={userProfile.city || ''}
-              onChange={handleInputChange}
-            />
-            <Input
-              type="text"
-              color="purple"
-              size="lg"
-              outline={true}
-              placeholder="SIREN"
-              name="siren"
-              value={userProfile.siren || ''}
-              onChange={handleInputChange}
-            />
-            <Input
-              type="text"
-              color="purple"
-              size="lg"
-              outline={true}
-              placeholder="BIC"
-              name="bic"
-              value={userProfile.bic || ''}
-              onChange={handleInputChange}
-            />
-            <Input
-              type="text"
-              color="purple"
-              size="lg"
-              outline={true}
-              placeholder="IBAN"
-              name="iban"
-              value={userProfile.iban || ''}
-              onChange={handleInputChange}
-            />
-            <Button
-              color="green"
-              buttonType="filled"
-              size="regular"
-              rounded={false}
-              block={false}
-              iconOnly={false}
-              ripple="light"
-              onClick={handleUpdateProfile}
-            >
-              Update Profile
-            </Button>
-          </form>
-        </CardBody>
+    <div>
+      <Card className="m-4 p-4">
+        <h2 className=" text-2xl">User Profile</h2>
+        <form className="flex flex-col gap-4">
+          <Input
+            type="text"
+            size="lg"
+            placeholder="Last name"
+            name="name"
+            value={userProfile.name || ''}
+            onChange={handleInputChange}
+          />
+          <Input
+            type="text"
+            size="lg"
+            placeholder="First name"
+            name="first_name"
+            value={userProfile.first_name || ''}
+            onChange={handleInputChange}
+          />
+          <Input
+            type="text"
+            size="lg"
+            placeholder="Address"
+            name="address"
+            value={userProfile.address || ''}
+            onChange={handleInputChange}
+          />
+          <Input
+            type="text"
+            size="lg"
+            placeholder="Postal Code"
+            name="postal_code"
+            value={userProfile.postal_code || ''}
+            onChange={handleInputChange}
+          />
+          <Input
+            type="text"
+            size="lg"
+            placeholder="City"
+            name="city"
+            value={userProfile.city || ''}
+            onChange={handleInputChange}
+          />
+          <Input
+            type="text"
+            size="lg"
+            placeholder="SIREN"
+            name="siren"
+            value={userProfile.siren || ''}
+            onChange={handleInputChange}
+          />
+          <Input
+            type="text"
+            size="lg"
+            placeholder="BIC"
+            name="bic"
+            value={userProfile.bic || ''}
+            onChange={handleInputChange}
+          />
+          <Input
+            type="text"
+            size="lg"
+            placeholder="IBAN"
+            name="iban"
+            value={userProfile.iban || ''}
+            onChange={handleInputChange}
+          />
+          <Button color="green" size="regular" onClick={handleUpdateProfile}>
+            Update Profile
+          </Button>
+        </form>
       </Card>
     </div>
   );

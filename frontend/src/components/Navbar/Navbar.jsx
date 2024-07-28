@@ -79,7 +79,12 @@ export const NavbarSimple = () => {
             >
               MyFree
             </Typography>
-            <Typography className="border-black border-l-2 px-4 cursor-pointer py-1.5 text-md">
+            <Typography
+              as={Link}
+              href="/profile"
+              className="border-black border-l-2 px-4 cursor-pointer py-1.5
+              text-md"
+            >
               Hello {session ? session.user.login : 'Guest'}
             </Typography>
           </div>
