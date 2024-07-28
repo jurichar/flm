@@ -102,21 +102,7 @@ const Module = () => {
   };
 
   const handleSaveInvoice = async () => {
-    try {
-      await axios.post(
-        `${API_BASE_URL}/api/invoices/create/`,
-        { ...stableFormValues, user: session.user.uid },
-        {
-          headers: {
-            Authorization: `Bearer ${session.accessToken}`,
-          },
-        },
-      );
-      alert('Invoice saved successfully!');
-    } catch (error) {
-      console.error('Error saving invoice:', error);
-      alert('Failed to save invoice');
-    }
+    console.log('Error saving invoice');
   };
 
   const memoizedPDFDocument = useMemo(

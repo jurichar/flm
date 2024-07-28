@@ -96,6 +96,13 @@ export const apiClient = {
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' },
     }),
+  patch: (url, body, options) =>
+    fetchWithAuth(`${API_BASE_URL}${url}`, {
+      ...options,
+      method: 'PATCH',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
+    }),
   delete: (url, options) =>
     fetchWithAuth(`${API_BASE_URL}${url}`, { ...options, method: 'DELETE' }),
 };
