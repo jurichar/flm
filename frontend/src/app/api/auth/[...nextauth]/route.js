@@ -1,9 +1,9 @@
 // src/app/api/auth/[...nextauth]/route.js
 
-import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { refreshAccessToken } from '../../../../utils/apiClient';
 
 const handler = NextAuth({
   providers: [
@@ -15,23 +15,41 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-          const res = await axios.post(`${API_BASE_URL}/api/token/`, {
-            login: credentials.login,
-            password: credentials.password,
-          });
+          console.log('credentials', credentials);
+          console.log(
+            'process.env.NEXT_PUBLIC_API_BASE_URL',
+            process.env.NEXT_PUBLIC_API_BASE_URL,
+          );
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/token/`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include',
+              body: JSON.stringify({
+                login: credentials.login,
+                password: credentials.password,
+              }),
+            },
+          );
 
-          const decoded = jwtDecode(res.data.access);
-          console.log('Decoded:', decoded);
+          const data = await res.json();
 
-          if (res.data) {
+          if (res.ok && data) {
+            const decoded = jwtDecode(data.access);
+            console.log('decoded:', decoded);
             return {
-              ...res.data,
+              accessToken: data.access,
+              refreshToken: data.refresh,
               user: {
                 login: credentials.login,
                 uid: decoded.user_uid,
               },
             };
+          } else {
+            throw new Error('Invalid credentials');
           }
         } catch (error) {
           console.error('Auth error:', error);
@@ -43,16 +61,29 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = user.access;
-        token.refreshToken = user.refresh;
+        token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
         token.user = user.user;
+        token.accessTokenExpires = jwtDecode(user.accessToken).exp * 1000;
       }
-      return token;
+
+      if (Date.now() < token.accessTokenExpires) {
+        return token;
+      }
+
+      return refreshAccessToken(token.refreshToken).then((data) => {
+        return {
+          ...token,
+          accessToken: data.access,
+          refreshToken: data.refresh || token.refreshToken,
+          accessTokenExpires: jwtDecode(data.access).exp * 1000,
+        };
+      });
     },
     async session({ session, token }) {
+      session.user = token.user;
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
-      session.user = token.user;
       return session;
     },
     async redirect({ url, baseUrl }) {

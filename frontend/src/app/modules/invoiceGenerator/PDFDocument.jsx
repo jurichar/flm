@@ -73,7 +73,7 @@ const PDFDocument = ({ formValues }) => {
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
             <Text style={[styles.text, { marginBottom: 40 }]}>SIREN :</Text>
-            <Text style={styles.text}>{formValues.SIREN}</Text>
+            <Text style={styles.text}>{formValues.siren}</Text>
           </View>
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
@@ -176,13 +176,13 @@ const PDFDocument = ({ formValues }) => {
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
             <Text style={styles.text}>BIC:</Text>
-            <Text style={styles.text}>{formValues.BIC}</Text>
+            <Text style={styles.text}>{formValues.bic}</Text>
           </View>
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
             <Text style={styles.text}>IBAN:</Text>
-            <Text style={styles.text}>{formValues.IBAN}</Text>
+            <Text style={styles.text}>{formValues.iban}</Text>
           </View>
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}

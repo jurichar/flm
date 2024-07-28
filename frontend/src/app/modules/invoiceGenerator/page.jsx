@@ -7,17 +7,18 @@ import FormInputs from './FormInputs';
 import PDFDocument from './PDFDocument';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Button } from '@material-tailwind/react';
+import apiClient from '../../../utils/apiClient';
 
 const Module = () => {
   const { data: session } = useSession();
   const [formValues, setFormValues] = useState({
-    name: '',
+    name: 'j',
     address: '',
     postalCode: '',
     city: '',
-    SIREN: '',
-    BIC: '',
-    IBAN: '',
+    siren: '',
+    bic: '',
+    iban: '',
     invoiceNumber: 1,
     clientName: '',
     clientAddress: '',
@@ -37,53 +38,36 @@ const Module = () => {
 
   useEffect(() => {
     if (session) {
+      // console.log('Session:', session);
       const fetchUserData = async () => {
         try {
-          const response = await axios.get(
-            `${API_BASE_URL}/api/user/retrieve/${session.user.uid}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session.accessToken}`,
-              },
-            },
+          console.log('Fetching user data:', session.user.uid);
+          const response = await apiClient.get(
+            `/api/user/retrieve/${session.user.uid}`,
           );
-          const userData = response.data;
-          setFormValues((prevValues) => ({
+          const userData = response;
+          console.log('User data login:', userData);
+          setBufferedValues((prevValues) => ({
             ...prevValues,
-            name: userData.name,
-            address: userData.address,
-            postalCode: userData.postalCode,
-            city: userData.city,
-            SIREN: userData.SIREN,
-            BIC: userData.BIC,
-            IBAN: userData.IBAN,
+            name: userData?.login || prevValues.name,
+            address: userData.address || prevValues.address,
+            postalCode: userData.postalCode || prevValues.postalCode,
+            city: userData.city || prevValues.city,
+            siren: userData.siren || prevValues.siren,
+            bic: userData.bic || prevValues.bic,
+            iban: userData.iban || prevValues.iban,
           }));
-
-          // const fetchInvoice = async () => {
-          //   try {
-          //     const invoiceResponse = await axios.get(
-          //       `${API_BASE_URL}/api/invoice/retrieve/${session.user.uid}`,
-          //       {
-          //         headers: {
-          //           Authorization: `Bearer ${session.accessToken}`,
-          //         },
-          //       },
-          //     );
-          //     setFormValues(invoiceResponse.data);
-          //   } catch (error) {
-          //     console.error('Error fetching invoice:', error);
-          //   }
-          // };
-
-          // fetchInvoice();
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
       };
-
       fetchUserData();
     }
-  }, [session]);
+  }, [session, setFormValues]);
+
+  useEffect(() => {
+    console.log('formValues updated:', formValues);
+  }, [formValues]);
 
   useEffect(() => {
     const timer = setTimeout(() => {

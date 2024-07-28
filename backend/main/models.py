@@ -24,11 +24,15 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     login = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
+    postal_code = models.CharField(max_length=10, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    siren = models.CharField(max_length=9, blank=True, null=True)
+    bic = models.CharField(max_length=11, blank=True, null=True)
     iban = models.CharField(max_length=34, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     is_active = models.BooleanField(default=True)

@@ -9,20 +9,14 @@ import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Button } from '@material-tailwind/react';
 
 const Module = () => {
-  const user = {
-    name: 'Fred PIERREAFEU',
-    address: '1 rue X',
-    postalCode: '75000',
-    city: 'Paris',
-    SIREN: '000000000',
-  };
-
   const [formValues] = useState({
-    name: user.name,
-    address: user.address,
-    postalCode: user.postalCode,
-    city: user.city,
-    SIREN: user.SIREN,
+    name: 'JULIEN RICHARD',
+    address: '120 Rue des Pyrénées',
+    postalCode: '75020',
+    city: 'Paris',
+    SIREN: '840365332',
+    BIC: 'CMCIFR2A',
+    IBAN: 'FR76 1027 8060 2100 0206 7230 204',
     estimateNumber: 1,
     clientName: '',
     clientAddress: '',

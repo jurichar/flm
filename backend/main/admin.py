@@ -25,8 +25,6 @@ for model in app_models:
 class CustomUserAdmin(UserAdmin):
     list_display = (
         "login",
-        "email",
-        "name",
         "is_staff",
     )
     ordering = ("login",)
@@ -35,7 +33,19 @@ class CustomUserAdmin(UserAdmin):
         (None, {"fields": ("login", "password")}),
         (
             "Personal info",
-            {"fields": ("name", "first_name", "address", "iban", "email")},
+            {
+                "fields": (
+                    "name",
+                    "first_name",
+                    "address",
+                    "postal_code",
+                    "city",
+                    "siren",
+                    "bic",
+                    "iban",
+                    "email",
+                )
+            },
         ),
         (
             "Permissions",
