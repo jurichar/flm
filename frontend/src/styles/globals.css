@@ -8,7 +8,7 @@
 /* Remove margin and padding from body */
 body {
   margin: 0;
-  padding: 0;
+  padding: 1rem;
 }
 
 /* Set default font family and size */

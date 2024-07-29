@@ -48,6 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Invoice(models.Model):
+    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invoices")
     invoice_number = models.CharField(max_length=255)
     client_name = models.CharField(max_length=255)
@@ -65,6 +66,7 @@ class Invoice(models.Model):
 
 
 class InvoiceItem(models.Model):
+    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="items")
     description = models.CharField(max_length=255)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)

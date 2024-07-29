@@ -8,7 +8,7 @@ import FormInputs from './FormInputs';
 import PDFDocument from './PDFDocument';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Button } from '@material-tailwind/react';
-import apiClient from '../../../utils/apiClient';
+import apiClient from '../../../../utils/apiClient';
 
 const Module = () => {
   const { data: session } = useSession();

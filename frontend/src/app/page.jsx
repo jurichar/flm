@@ -24,11 +24,6 @@ export default function Home() {
       link: 'estimate',
     },
     {
-      name: 'invoice_generator',
-      description: 'Module 2 description',
-      link: 'invoiceGenerator',
-    },
-    {
       name: 'estimate generator',
       description: 'Module 2 description',
       link: 'estimateGenerator',
