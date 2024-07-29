@@ -3,27 +3,27 @@ import main.crud.crud_invoiceitem as api_views
 
 urlpatterns = [
     path(
-        "list/invoiceitem/",
+        "list/",
         api_views.ListInvoiceItemAPIView.as_view(),
         name="list-invoiceitem",
     ),
     path(
-        "create/invoiceitem/",
+        "create/",
         api_views.CreateInvoiceItemAPIView.as_view(),
         name="create-invoiceitem",
     ),
     path(
-        "update/invoiceitem/<uuid:invoiceitem_uid>/",
+        "update/<uuid:invoiceitem_uid>/",
         api_views.UpdateInvoiceItemAPIView.as_view(),
         name="update-invoiceitem",
     ),
     path(
-        "delete/invoiceitem/<uuid:invoiceitem_uid>/",
+        "delete/<uuid:invoiceitem_uid>/",
         api_views.DeleteInvoiceItemAPIView.as_view(),
         name="delete-invoiceitem",
     ),
     path(
-        "retrieve/invoiceitem/<uuid:invoiceitem_uid>/",
+        "retrieve/<uuid:invoiceitem_uid>/",
         api_views.RetrieveInvoiceItemAPIView.as_view(),
         name="retrieve-invoiceitem",
     ),

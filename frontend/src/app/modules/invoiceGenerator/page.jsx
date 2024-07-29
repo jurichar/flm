@@ -1,8 +1,9 @@
+// src/app/modules/invoiceGenerator/page.jsx
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import axios from 'axios';
 import FormInputs from './FormInputs';
 import PDFDocument from './PDFDocument';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
@@ -35,11 +36,8 @@ const Module = () => {
   const [bufferedValues, setBufferedValues] = useState(formValues);
   const [stableFormValues, setStableFormValues] = useState(formValues);
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
   useEffect(() => {
     if (session) {
-      // console.log('Session:', session);
       const fetchUserData = async () => {
         try {
           console.log('Fetching user data:', session.user.uid);
@@ -104,7 +102,33 @@ const Module = () => {
   };
 
   const handleSaveInvoice = async () => {
-    console.log('Error saving invoice');
+    try {
+      const response = await apiClient.post('/api/invoice/create/', {
+        user: session.user.uid,
+        invoice_number: stableFormValues.invoiceNumber,
+        client_name: stableFormValues.clientName,
+        client_address: stableFormValues.clientAddress,
+        client_postal_code: stableFormValues.clientPostalCode,
+        client_city: stableFormValues.clientCity,
+        tva: stableFormValues.TVA,
+        total_ht: stableFormValues.totalHT,
+        total_tva: stableFormValues.totalTVA,
+        total_ttc: stableFormValues.totalTTC,
+        items: stableFormValues.items
+          .map((item) => ({
+            name: item.name,
+            details: item.details,
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            total: item.total,
+          }))
+          .filter((item) => item.name),
+      });
+      console.log('Invoice saved:', response);
+    } catch (error) {
+      console.error('Error saving invoice:', error);
+      alert('Failed to save invoice');
+    }
   };
 
   const memoizedPDFDocument = useMemo(
