@@ -105,6 +105,15 @@ const Module = () => {
     try {
       const response = await apiClient.post('/api/invoice/create/', {
         user: session.user.uid,
+        first_name: stableFormValues.first_name,
+        last_name: stableFormValues.name,
+        address: stableFormValues.address,
+        postal_code: stableFormValues.postalCode,
+        city: stableFormValues.city,
+        siren: stableFormValues.siren,
+        bic: stableFormValues.bic,
+        iban: stableFormValues.iban,
+        date: new Date().toISOString(),
         invoice_number: stableFormValues.invoiceNumber,
         client_name: stableFormValues.clientName,
         client_address: stableFormValues.clientAddress,

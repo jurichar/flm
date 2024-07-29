@@ -50,6 +50,16 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Invoice(models.Model):
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invoices")
+    first_name = models.CharField(max_length=255, default="Unknown")
+    last_name = models.CharField(max_length=255, default="Unknown")
+    address = models.CharField(
+        max_length=255, default=""
+    )  # Use empty string for address
+    postal_code = models.CharField(max_length=10, default="00000")
+    city = models.CharField(max_length=100, default="")
+    siren = models.CharField(max_length=9, default="000000000")
+    bic = models.CharField(max_length=11, default="XXXXXXXXXXX")
+    iban = models.CharField(max_length=34, default="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
     invoice_number = models.CharField(max_length=255)
     client_name = models.CharField(max_length=255)
     client_address = models.CharField(max_length=255)
