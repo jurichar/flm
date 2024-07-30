@@ -17,7 +17,7 @@ SECRET_KEY = "django-insecure--z$oq2r++3_6_e-w$y$l$6bll0cm9cs%4m5fe%)9r%@i8_5j(j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -67,6 +67,19 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "credentials",
+]
 
 AUTH_USER_MODEL = "main.User"
 
