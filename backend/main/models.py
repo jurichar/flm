@@ -52,9 +52,7 @@ class Invoice(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invoices")
     first_name = models.CharField(max_length=255, default="Unknown")
     last_name = models.CharField(max_length=255, default="Unknown")
-    address = models.CharField(
-        max_length=255, default=""
-    )  # Use empty string for address
+    address = models.CharField(max_length=255, default="")
     postal_code = models.CharField(max_length=10, default="00000")
     city = models.CharField(max_length=100, default="")
     siren = models.CharField(max_length=9, default="000000000")

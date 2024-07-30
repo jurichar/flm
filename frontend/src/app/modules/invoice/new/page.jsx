@@ -113,7 +113,6 @@ const Module = () => {
         siren: stableFormValues.siren,
         bic: stableFormValues.bic,
         iban: stableFormValues.iban,
-        date: new Date().toISOString(),
         invoice_number: stableFormValues.invoiceNumber,
         client_name: stableFormValues.clientName,
         client_address: stableFormValues.clientAddress,
