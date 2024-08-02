@@ -70,6 +70,7 @@ class Invoice(models.Model):
     total_ttc = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     items = JSONField(default=list)
+    paid = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Invoice {self.invoice_number} - {self.client_name}"

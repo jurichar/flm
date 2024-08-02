@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   table: {
+    zIndex: 10,
     display: 'table',
     width: 'auto',
     borderStyle: 'solid',
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
     borderColor: '#efefef',
   },
   tableColHeader40: {
+    opacity: 0.7,
     width: '40%',
     borderStyle: 'solid',
     borderWidth: 1,
@@ -87,6 +89,7 @@ const styles = StyleSheet.create({
     borderColor: '#efefef',
   },
   tableColHeader70: {
+    opacity: 0.7,
     width: '17.5%',
     borderStyle: 'solid',
     borderWidth: 1,
@@ -98,6 +101,7 @@ const styles = StyleSheet.create({
     borderColor: '#efefef',
   },
   tableCellHeader: {
+    zIndex: 10,
     margin: 'auto',
     fontSize: 10,
     fontWeight: 'bold',
@@ -140,6 +144,23 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: '100%',
     backgroundColor: '#667a8b',
+  },
+  watermarkContainer: {
+    position: 'absolute',
+    top: '0%',
+    left: '10%',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  watermark: {
+    transform: 'rotate(-45deg)',
+    fontSize: 200,
+    color: 'rgba(255, 0, 0, 0.3)',
+    textAlign: 'center',
   },
 });
 

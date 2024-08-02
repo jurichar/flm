@@ -3,7 +3,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Card, Button } from '@material-tailwind/react';
+import { Card, Button, Checkbox } from '@material-tailwind/react';
 import apiClient from '../../../utils/apiClient';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -48,10 +48,40 @@ const InvoicesPage = () => {
     }
   };
 
+  const handlePaidChange = async (invoiceId, paid) => {
+    try {
+      const invoice = invoices.find((inv) => inv.uid === invoiceId);
+
+      await apiClient.put(
+        `/api/invoice/update/${invoiceId}/`,
+        {
+          invoice_number: invoice.invoice_number,
+          client_name: invoice.client_name,
+          client_address: invoice.client_address,
+          client_postal_code: invoice.client_postal_code,
+          client_city: invoice.client_city,
+          tva: invoice.tva,
+          total_ht: invoice.total_ht,
+          total_tva: invoice.total_tva,
+          total_ttc: invoice.total_ttc,
+          user: invoice.user,
+          paid: paid,
+        },
+        session.accessToken,
+      );
+
+      setInvoices(
+        invoices.map((inv) => (inv.uid === invoiceId ? { ...inv, paid } : inv)),
+      );
+    } catch (error) {
+      console.error('Failed to update invoice:', error);
+    }
+  };
+
   return (
     <div>
-      <Card>
-        <table className="min-w-full divide-y divide-gray-200">
+      <Card className="!rounded-xl p-4">
+        <table className="w-full divide-y divide-gray-200 !rounded">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -71,6 +101,9 @@ const InvoicesPage = () => {
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Created At
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Paid
               </th>
             </tr>
           </thead>
@@ -94,6 +127,14 @@ const InvoicesPage = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {new Date(invoice.created_at).toLocaleDateString()}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <Checkbox
+                    checked={invoice.paid}
+                    onChange={(e) =>
+                      handlePaidChange(invoice.uid, e.target.checked)
+                    }
+                  />
                 </td>
                 <td className=" py-4 whitespace-nowrap text-right text-sm font-medium flex gap-4">
                   <Button

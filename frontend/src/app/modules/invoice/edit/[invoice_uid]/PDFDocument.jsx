@@ -210,6 +210,11 @@ const PDFDocument = ({ formValues }) => {
             recouvrement. Pas d&apos;escompte pour règlement anticipe.
           </Text>
         </View>
+        {formValues.paid ? (
+          <View style={styles.watermarkContainer}>
+            <Text style={styles.watermark}>PAYÉ</Text>
+          </View>
+        ) : null}
       </Page>
     </Document>
   );
