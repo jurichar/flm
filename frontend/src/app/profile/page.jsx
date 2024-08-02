@@ -30,6 +30,7 @@ const UserProfile = () => {
       await apiClient.patch(
         `/api/user/update/${session.user.uid}/`,
         userProfile,
+        session.accessToken,
       );
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -41,6 +42,7 @@ const UserProfile = () => {
       try {
         const response = await apiClient.get(
           `/api/user/retrieve/${session.user.uid}/`,
+          session.accessToken,
         );
         setUserProfile({
           name: response.name,

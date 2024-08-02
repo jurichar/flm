@@ -5,6 +5,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+from django.db.models import JSONField
 
 
 class UserManager(BaseUserManager):
@@ -68,17 +69,7 @@ class Invoice(models.Model):
     total_tva = models.DecimalField(max_digits=10, decimal_places=2)
     total_ttc = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
+    items = JSONField(default=list)
 
     def __str__(self):
         return f"Invoice {self.invoice_number} - {self.client_name}"
-
-
-class InvoiceItem(models.Model):
-    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="items")
-    description = models.CharField(max_length=255)
-    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.PositiveIntegerField()
-
-    def __str__(self):
-        return f"Item {self.description} for Invoice {self.invoice.invoice_number}"

@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, use } from 'react';
 import { useSession } from 'next-auth/react';
 import FormInputs from './FormInputs';
 import PDFDocument from './PDFDocument';
@@ -16,7 +16,7 @@ const Module = () => {
     first_name: '',
     name: '',
     address: '',
-    postalCode: '',
+    postal_code: '',
     city: '',
     siren: '',
     bic: '',
@@ -40,18 +40,17 @@ const Module = () => {
     if (session) {
       const fetchUserData = async () => {
         try {
-          console.log('Fetching user data:', session.user.uid);
           const response = await apiClient.get(
             `/api/user/retrieve/${session.user.uid}`,
+            session.accessToken,
           );
           const userData = response;
-          console.log('User data login:', userData);
           setBufferedValues((prevValues) => ({
             ...prevValues,
             first_name: userData.first_name,
             name: userData.name,
             address: userData.address,
-            postalCode: userData.postalCode,
+            postal_code: userData.postal_code,
             city: userData.city,
             siren: userData.siren,
             bic: userData.bic,
@@ -64,10 +63,6 @@ const Module = () => {
       fetchUserData();
     }
   }, [session, setFormValues]);
-
-  useEffect(() => {
-    console.log('formValues updated:', formValues);
-  }, [formValues]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -103,12 +98,20 @@ const Module = () => {
 
   const handleSaveInvoice = async () => {
     try {
-      const response = await apiClient.post('/api/invoice/create/', {
+      const itemsToSave = stableFormValues.items.map((item) => ({
+        name: item.name,
+        details: item.details,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        total: item.total,
+      }));
+
+      const invoiceData = {
         user: session.user.uid,
         first_name: stableFormValues.first_name,
         last_name: stableFormValues.name,
         address: stableFormValues.address,
-        postal_code: stableFormValues.postalCode,
+        postal_code: stableFormValues.postal_code,
         city: stableFormValues.city,
         siren: stableFormValues.siren,
         bic: stableFormValues.bic,
@@ -122,17 +125,14 @@ const Module = () => {
         total_ht: stableFormValues.totalHT,
         total_tva: stableFormValues.totalTVA,
         total_ttc: stableFormValues.totalTTC,
-        items: stableFormValues.items
-          .map((item) => ({
-            name: item.name,
-            details: item.details,
-            quantity: item.quantity,
-            unitPrice: item.unitPrice,
-            total: item.total,
-          }))
-          .filter((item) => item.name),
-      });
-      console.log('Invoice saved:', response);
+        items: itemsToSave,
+      };
+
+      const response = await apiClient.post(
+        '/api/invoice/create/',
+        invoiceData,
+        session.accessToken,
+      );
     } catch (error) {
       console.error('Error saving invoice:', error);
       alert('Failed to save invoice');

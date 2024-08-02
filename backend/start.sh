@@ -14,5 +14,3 @@ python manage.py loaddata fixtures/data.json
 
 echo "Starting server..."
 ./manage.py runserver 0.0.0.0:8000
-
-# echo "Server started!"

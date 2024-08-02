@@ -2,13 +2,14 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSession } from 'react';
 import { PDFViewer } from '@react-pdf/renderer';
 import PDFDocument from './PDFDocument';
 import apiClient from '../../../../../utils/apiClient';
 import { usePathname } from 'next/navigation';
 
 const InvoiceEditPage = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const invoice_uid = pathname.split('/').pop();
   const [invoiceDetails, setInvoiceDetails] = useState(null);
@@ -19,6 +20,7 @@ const InvoiceEditPage = () => {
         try {
           const response = await apiClient.get(
             `/api/invoice/retrieve/${invoice_uid}`,
+            session.accessToken,
           );
           console.log('Response in invoice uid:', response);
           setInvoiceDetails(response);
@@ -29,6 +31,10 @@ const InvoiceEditPage = () => {
       fetchInvoiceDetails();
     }
   }, [invoice_uid]);
+
+  useEffect(() => {
+    console.log('invoiceDetails:', invoiceDetails);
+  }, [invoiceDetails]);
 
   if (!invoiceDetails) return <p>Loading...</p>;
 

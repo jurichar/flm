@@ -81,6 +81,22 @@ CORS_ALLOW_HEADERS = [
     "credentials",
 ]
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
+}
+
 AUTH_USER_MODEL = "main.User"
 
 ROOT_URLCONF = "freelance-manager.urls"

@@ -2,28 +2,34 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSession } from 'react';
 import { Card, Button } from '@material-tailwind/react';
 import apiClient from '../../../utils/apiClient';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const InvoicesPage = () => {
+  const { data: session, status } = useSession();
   const [invoices, setInvoices] = useState([]);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchInvoices = async () => {
-      try {
-        const response = await apiClient.get('/api/invoice/list/');
-        setInvoices(response);
-      } catch (error) {
-        console.error('Failed to fetch invoices:', error);
-      }
-    };
+  const fetchInvoices = async () => {
+    try {
+      const response = await apiClient.get(
+        '/api/invoice/list/',
+        session.accessToken,
+      );
+      setInvoices(response);
+    } catch (error) {
+      console.error('Failed to fetch invoices:', error);
+    }
+  };
 
-    fetchInvoices();
-  }, []);
+  useEffect(() => {
+    if (status === 'authenticated') {
+      fetchInvoices();
+    }
+  }, [status, session]);
 
   const handleView = (invoiceId) => {
     router.push(`/modules/invoice/edit/${invoiceId}/`);
@@ -31,7 +37,10 @@ const InvoicesPage = () => {
 
   const handleDelete = async (invoiceId) => {
     try {
-      await apiClient.delete(`/api/invoice/delete/${invoiceId}/`);
+      await apiClient.delete(
+        `/api/invoice/delete/${invoiceId}/`,
+        session.accessToken,
+      );
       setInvoices(invoices.filter((invoice) => invoice.uid !== invoiceId));
     } catch (error) {
       console.error('Failed to delete invoice:', error);

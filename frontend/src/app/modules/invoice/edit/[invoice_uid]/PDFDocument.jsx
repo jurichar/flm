@@ -130,7 +130,7 @@ const PDFDocument = ({ formValues }) => {
                       <Text style={styles.tableCell}>{item.unitPrice} €</Text>
                     </View>
                     <View style={styles.tableCol70}>
-                      <Text style={styles.tableCell}>{formValues.TVA}%</Text>
+                      <Text style={styles.tableCell}>{formValues.tva}%</Text>
                     </View>
                     <View style={styles.tableCol70}>
                       <Text style={styles.tableCell}>{item.total} €</Text>
@@ -145,13 +145,13 @@ const PDFDocument = ({ formValues }) => {
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
             <Text style={styles.text}>Total HT:</Text>
-            <Text style={styles.text}>{formValues.totalHT} €</Text>
+            <Text style={styles.text}>{formValues.total_ht} €</Text>
           </View>
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
             <Text style={styles.text}>Total TVA: </Text>
-            <Text style={styles.text}>{formValues.totalTVA} €</Text>
+            <Text style={styles.text}>{formValues.total_tva} €</Text>
           </View>
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
@@ -160,7 +160,7 @@ const PDFDocument = ({ formValues }) => {
               Total TTC:
             </Text>
             <Text style={[styles.text, { fontWeight: 'bold' }]}>
-              {formValues.totalTTC} €
+              {formValues.total_ttc} €
             </Text>
           </View>
           <Text style={styles.subtext}>

@@ -1,110 +1,93 @@
 // src/utils/apiClient.js
 
 import { jwtDecode } from 'jwt-decode';
-import { getSession, signIn } from 'next-auth/react';
 
 const API_BASE_URL = 'http://localhost:8000';
 
 export const refreshAccessToken = async (refreshToken) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/token/refresh/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({ refresh: refreshToken }),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Data received:', data);
-      return data;
-    } else {
-      throw new Error('Failed to refresh access token');
-    }
-  } catch (error) {
-    console.error('Error refreshing access token', error);
+  const response = await fetch(`${API_BASE_URL}/api/token/refresh/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ refresh: refreshToken }),
+  });
+
+  if (!response.ok) {
+    console.error(
+      'Failed to refresh access token:',
+      response.status,
+      response.statusText,
+    );
     throw new Error('Failed to refresh access token');
   }
+
+  return await response.json();
 };
 
-const fetchWithAuth = async (url, options = {}) => {
-  console.log('Fetching session...');
-  const session = await getSession();
-  console.log('Session:', session);
-
-  if (!session) {
-    console.error('No session found, signing in...');
-    signIn();
-    throw new Error('Not authenticated');
+const fetchWithAuth = async (url, token, options = {}) => {
+  console.log('fetchWithAuth', url, token, options);
+  if (!token) {
+    throw new Error('Authorization token is required');
   }
 
-  let token = session.accessToken;
-  console.log('Using token:', token);
-
+  let currentToken = token;
   const decodedToken = jwtDecode(token);
-  console.log('Decoded token:', decodedToken);
-
   if (Date.now() >= decodedToken.exp * 1000) {
-    console.log('Token expired, refreshing...');
-    try {
-      const data = await refreshAccessToken(session.refreshToken);
-      session.accessToken = data.access;
-      token = data.access;
-      console.log('Token refreshed:', token);
-    } catch (error) {
-      console.error('Failed to refresh token:', error);
-      signIn();
-      throw error;
-    }
+    const refreshedTokenData = await refreshAccessToken(
+      decodedToken.refreshToken,
+    );
+    currentToken = refreshedTokenData.access;
   }
 
-  options.headers = {
+  const headers = {
     ...options.headers,
-    Authorization: `Bearer ${token}`,
-    credentials: 'include',
+    Authorization: `Bearer ${currentToken}`,
+    'Content-Type': 'application/json',
   };
 
-  console.log(`Sending request to ${url} with token`, token);
-  const response = await fetch(url, options);
-  console.log('API response:', response);
+  const response = await fetch(`${API_BASE_URL}${url}`, {
+    ...options,
+    headers,
+  });
 
   if (!response.ok) {
     console.error('Failed to fetch:', response.status, response.statusText);
     throw new Error('Network response was not ok');
   }
 
-  const jsonData = await response.json();
-  console.log('Parsed JSON Data:', jsonData);
-  return jsonData;
+  return response.status !== 204 ? await response.json() : null;
 };
 
 export const apiClient = {
-  get: (url, options) =>
-    fetchWithAuth(`${API_BASE_URL}${url}`, { ...options, method: 'GET' }),
-  post: (url, body, options) =>
-    fetchWithAuth(`${API_BASE_URL}${url}`, {
+  get: (url, token, options = {}) =>
+    fetchWithAuth(url, token, {
+      ...options,
+      credentials: 'include',
+      method: 'GET',
+    }),
+  post: (url, body, token, options = {}) =>
+    fetchWithAuth(url, token, {
       ...options,
       method: 'POST',
       body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json', ...options.headers },
     }),
-  put: (url, body, options) =>
-    fetchWithAuth(`${API_BASE_URL}${url}`, {
+  put: (url, body, token, options = {}) =>
+    fetchWithAuth(url, token, {
       ...options,
       method: 'PUT',
       body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json', ...options.headers },
     }),
-  patch: (url, body, options) =>
-    fetchWithAuth(`${API_BASE_URL}${url}`, {
+  delete: (url, token, options = {}) =>
+    fetchWithAuth(url, token, {
       ...options,
-      method: 'PATCH',
-      body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      method: 'DELETE',
     }),
-  delete: (url, options) =>
-    fetchWithAuth(`${API_BASE_URL}${url}`, { ...options, method: 'DELETE' }),
 };
 
 export default apiClient;

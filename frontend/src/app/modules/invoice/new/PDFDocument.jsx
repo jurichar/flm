@@ -53,7 +53,7 @@ const PDFDocument = ({ formValues }) => {
             </Text>
             <Text style={styles.text}>{formValues.address}</Text>
             <Text style={styles.text}>
-              {formValues.postalCode} {formValues.city}
+              {formValues.postal_code} {formValues.city}
             </Text>
             <Text style={styles.text}>France</Text>
           </View>

@@ -15,11 +15,6 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          console.log('credentials', credentials);
-          console.log(
-            'process.env.NEXT_PUBLIC_API_BASE_URL',
-            process.env.NEXT_PUBLIC_API_BASE_URL,
-          );
           const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/token/`,
             {
@@ -32,7 +27,7 @@ const handler = NextAuth({
                 login: credentials.login,
                 password: credentials.password,
               }),
-            },
+            }
           );
 
           const data = await res.json();
@@ -61,9 +56,9 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        token.user = user.user;
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.user = user.user;
         token.accessTokenExpires = jwtDecode(user.accessToken).exp * 1000;
       }
 
