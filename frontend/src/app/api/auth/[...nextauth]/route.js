@@ -27,7 +27,7 @@ const handler = NextAuth({
                 login: credentials.login,
                 password: credentials.password,
               }),
-            }
+            },
           );
 
           const data = await res.json();

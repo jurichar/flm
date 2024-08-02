@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState, useMemo, useEffect, use } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import FormInputs from './FormInputs';
 import PDFDocument from './PDFDocument';
@@ -133,6 +133,8 @@ const Module = () => {
         invoiceData,
         session.accessToken,
       );
+      alert('Invoice saved successfully');
+      console.log('Invoice saved:', response);
     } catch (error) {
       console.error('Error saving invoice:', error);
       alert('Failed to save invoice');

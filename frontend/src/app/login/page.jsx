@@ -48,8 +48,8 @@ const LoginPage = () => {
       <div className="fixed top-4 right-4">
         <LocalSwitcher />
       </div>
-      <Card shadow={false} className="m-4 p-4">
-        <Typography color="blue-gray" className="font-normal text-2xl">
+      <Card className="m-4 p-4" shadow={false}>
+        <Typography className="font-normal text-2xl" color="blue-gray">
           {t('title')}
         </Typography>
         <form
@@ -69,11 +69,11 @@ const LoginPage = () => {
               labelProps={{
                 className: 'before:content-none after:content-none',
               }}
+              onChange={handleLoginChange}
               placeholder="login"
               size="lg"
               type="text"
               value={login}
-              onChange={handleLoginChange}
             />
             <Typography
               className="-mb-3 text-lg"
@@ -87,18 +87,18 @@ const LoginPage = () => {
               labelProps={{
                 className: 'before:content-none after:content-none',
               }}
+              onChange={handlePasswordChange}
               placeholder="********"
               size="lg"
               type="password"
               value={password}
-              onChange={handlePasswordChange}
             />
           </div>
-          {error && (
-            <Typography color="red" className="mt-2 text-center text-lg">
+          {error ? (
+            <Typography className="mt-2 text-center text-lg" color="red">
               {error}
             </Typography>
-          )}
+          ) : null}
           <Button className="mt-6" fullWidth type="submit">
             {t('login')}
           </Button>

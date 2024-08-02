@@ -2,11 +2,13 @@
 
 'use client';
 
-import { useState, useEffect, useSession } from 'react';
+import { useState, useEffect } from 'react';
 import { PDFViewer } from '@react-pdf/renderer';
 import PDFDocument from './PDFDocument';
 import apiClient from '../../../../../utils/apiClient';
 import { usePathname } from 'next/navigation';
+import { useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 
 const InvoiceEditPage = () => {
   const { data: session } = useSession();
@@ -14,27 +16,24 @@ const InvoiceEditPage = () => {
   const invoice_uid = pathname.split('/').pop();
   const [invoiceDetails, setInvoiceDetails] = useState(null);
 
-  useEffect(() => {
-    if (invoice_uid) {
-      const fetchInvoiceDetails = async () => {
-        try {
-          const response = await apiClient.get(
-            `/api/invoice/retrieve/${invoice_uid}`,
-            session.accessToken,
-          );
-          console.log('Response in invoice uid:', response);
-          setInvoiceDetails(response);
-        } catch (error) {
-          console.error('Error fetching invoice details:', error);
-        }
-      };
-      fetchInvoiceDetails();
+  const fetchInvoiceDetails = useCallback(async () => {
+    try {
+      const response = await apiClient.get(
+        `/api/invoice/retrieve/${invoice_uid}`,
+        session?.accessToken,
+      );
+      console.log('Response in invoice uid:', response);
+      setInvoiceDetails(response);
+    } catch (error) {
+      console.error('Error fetching invoice details:', error);
     }
-  }, [invoice_uid]);
+  }, [invoice_uid, session?.accessToken]);
 
   useEffect(() => {
-    console.log('invoiceDetails:', invoiceDetails);
-  }, [invoiceDetails]);
+    if (invoice_uid) {
+      fetchInvoiceDetails();
+    }
+  }, [fetchInvoiceDetails, invoice_uid]);
 
   if (!invoiceDetails) return <p>Loading...</p>;
 

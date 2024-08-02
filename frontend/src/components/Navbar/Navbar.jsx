@@ -17,9 +17,8 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
-import LocaleSwitcher from '../Shared/LocaleSwitcher';
-// import ModalSettings from '../Settings/ModalSettings';
 import { signOut, useSession } from 'next-auth/react';
+import LocaleSwitcher from '../Shared/LocaleSwitcher';
 
 const NavList = () => {
   return (
@@ -39,8 +38,8 @@ const NavList = () => {
         variant="small"
       >
         <Button
-          onClick={() => signOut()}
           className="flex items-center hover:text-blue-500 transition-colors"
+          onClick={() => signOut()}
         >
           <FontAwesomeIcon icon={faRightFromBracket} />
         </Button>
@@ -49,7 +48,7 @@ const NavList = () => {
   );
 };
 
-export const NavbarSimple = () => {
+const NavbarSimple = () => {
   const [openNav, setOpenNav] = useState(false);
   const { data: session, status } = useSession();
 
@@ -81,9 +80,8 @@ export const NavbarSimple = () => {
             </Typography>
             <Typography
               as={Link}
+              className="border-black border-l-2 px-4 cursor-pointer py-1.5 text-md"
               href="/profile"
-              className="border-black border-l-2 px-4 cursor-pointer py-1.5
-              text-md"
             >
               Hello {session ? session.user.login : 'Guest'}
             </Typography>
@@ -110,3 +108,5 @@ export const NavbarSimple = () => {
     )
   );
 };
+
+export default NavbarSimple;

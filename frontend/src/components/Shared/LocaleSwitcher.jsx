@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import LocaleSwitcherSelect from './LocaleSwitcherSelect';
 import { locales } from '../../config';
 
-export default function LocaleSwitcher() {
+const LocaleSwitcher = () => {
   const t = useTranslations('LocaleSwitcher');
   const locale = useLocale();
 
@@ -18,4 +18,6 @@ export default function LocaleSwitcher() {
       label={t('label')}
     />
   );
-}
+};
+
+export default LocaleSwitcher;

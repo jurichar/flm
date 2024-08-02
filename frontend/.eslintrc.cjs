@@ -11,7 +11,11 @@ module.exports = {
     'plugin:react-hooks/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
+  parserOptions: {
+    babelOptions: {
+      presets: [require.resolve('next/babel')],
+    },
+  },
   settings: { react: { version: 'detect' } },
   rules: {
     'react/jsx-no-target-blank': 'off',

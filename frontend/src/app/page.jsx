@@ -2,11 +2,11 @@
 
 'use client';
 
-import { useTranslations } from 'next-intl';
+// import { useTranslations } from 'next-intl';
 import ModuleCard from '../components/Modules/ModuleCard';
 
 export default function Home() {
-  const t = useTranslations('HomePage');
+  // const t = useTranslations('HomePage');
   const modules = [
     {
       name: 'calculator',
@@ -34,10 +34,10 @@ export default function Home() {
       <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-w-full">
         {modules.map((mod, index) => (
           <ModuleCard
-            key={index}
-            name={mod.name}
             description={mod.description}
+            key={index}
             link={mod.link}
+            name={mod.name}
           />
         ))}
       </div>

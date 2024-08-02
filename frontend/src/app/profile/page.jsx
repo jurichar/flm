@@ -70,70 +70,70 @@ const UserProfile = () => {
         <h2 className=" text-2xl">User Profile</h2>
         <form className="flex flex-col gap-4">
           <Input
-            type="text"
-            size="lg"
-            placeholder="Last name"
             name="name"
+            onChange={handleInputChange}
+            placeholder="Last name"
+            size="lg"
+            type="text"
             value={userProfile.name || ''}
-            onChange={handleInputChange}
           />
           <Input
-            type="text"
-            size="lg"
-            placeholder="First name"
             name="first_name"
+            onChange={handleInputChange}
+            placeholder="First name"
+            size="lg"
+            type="text"
             value={userProfile.first_name || ''}
-            onChange={handleInputChange}
           />
           <Input
-            type="text"
-            size="lg"
-            placeholder="Address"
             name="address"
+            onChange={handleInputChange}
+            placeholder="Address"
+            size="lg"
+            type="text"
             value={userProfile.address || ''}
-            onChange={handleInputChange}
           />
           <Input
-            type="text"
-            size="lg"
-            placeholder="Postal Code"
             name="postal_code"
+            onChange={handleInputChange}
+            placeholder="Postal Code"
+            size="lg"
+            type="text"
             value={userProfile.postal_code || ''}
-            onChange={handleInputChange}
           />
           <Input
-            type="text"
-            size="lg"
-            placeholder="City"
             name="city"
+            onChange={handleInputChange}
+            placeholder="City"
+            size="lg"
+            type="text"
             value={userProfile.city || ''}
-            onChange={handleInputChange}
           />
           <Input
-            type="text"
-            size="lg"
-            placeholder="SIREN"
             name="siren"
+            onChange={handleInputChange}
+            placeholder="SIREN"
+            size="lg"
+            type="text"
             value={userProfile.siren || ''}
-            onChange={handleInputChange}
           />
           <Input
-            type="text"
-            size="lg"
-            placeholder="BIC"
             name="bic"
-            value={userProfile.bic || ''}
             onChange={handleInputChange}
+            placeholder="BIC"
+            size="lg"
+            type="text"
+            value={userProfile.bic || ''}
           />
           <Input
-            type="text"
-            size="lg"
-            placeholder="IBAN"
             name="iban"
-            value={userProfile.iban || ''}
             onChange={handleInputChange}
+            placeholder="IBAN"
+            size="lg"
+            type="text"
+            value={userProfile.iban || ''}
           />
-          <Button color="green" size="regular" onClick={handleUpdateProfile}>
+          <Button color="green" onClick={handleUpdateProfile} size="regular">
             Update Profile
           </Button>
         </form>

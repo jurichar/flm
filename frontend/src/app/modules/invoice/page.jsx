@@ -2,34 +2,35 @@
 
 'use client';
 
-import { useState, useEffect, useSession } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, Button } from '@material-tailwind/react';
 import apiClient from '../../../utils/apiClient';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const InvoicesPage = () => {
   const { data: session, status } = useSession();
   const [invoices, setInvoices] = useState([]);
   const router = useRouter();
 
-  const fetchInvoices = async () => {
+  const fetchInvoices = useCallback(async () => {
     try {
       const response = await apiClient.get(
         '/api/invoice/list/',
-        session.accessToken,
+        session?.accessToken,
       );
       setInvoices(response);
     } catch (error) {
       console.error('Failed to fetch invoices:', error);
     }
-  };
+  }, [session?.accessToken, setInvoices]);
 
   useEffect(() => {
     if (status === 'authenticated') {
       fetchInvoices();
     }
-  }, [status, session]);
+  }, [session, fetchInvoices, status]);
 
   const handleView = (invoiceId) => {
     router.push(`/modules/invoice/edit/${invoiceId}/`);
