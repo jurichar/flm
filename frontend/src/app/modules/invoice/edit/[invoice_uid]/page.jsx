@@ -9,6 +9,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import PDFDocument from './PDFDocument';
 import apiClient from '../../../../../utils/apiClient';
 import { useSession } from 'next-auth/react';
+import LoadingScreen from '../../../../../components/Shared/LoadingScreen';
 
 const InvoiceEditPage = () => {
   const { data: session } = useSession();
@@ -16,6 +17,7 @@ const InvoiceEditPage = () => {
   const pathname = usePathname();
   const invoice_uid = pathname.split('/').pop();
   const [invoiceDetails, setInvoiceDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchInvoiceDetails = useCallback(async () => {
     try {
@@ -27,6 +29,8 @@ const InvoiceEditPage = () => {
       setInvoiceDetails(response);
     } catch (error) {
       console.error('Error fetching invoice details:', error);
+    } finally {
+      setLoading(false);
     }
   }, [invoice_uid, session?.accessToken]);
 
@@ -39,6 +43,7 @@ const InvoiceEditPage = () => {
   if (!invoiceDetails) return <p>Loading...</p>;
 
   const handleCopyInvoice = async () => {
+    setLoading(true);
     try {
       const newInvoiceDetails = {
         ...invoiceDetails,
@@ -56,8 +61,12 @@ const InvoiceEditPage = () => {
     } catch (error) {
       console.error('Error copying invoice:', error);
       alert('Failed to copy invoice');
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <div className="flex flex-col md:flex-row justify-between gap-8">

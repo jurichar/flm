@@ -2,17 +2,18 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import FormInputs from './FormInputs';
 import PDFDocument from './PDFDocument';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Button } from '@material-tailwind/react';
 import apiClient from '../../../../utils/apiClient';
+import LoadingScreen from '../../../../components/Shared/LoadingScreen';
 
 const Module = () => {
   const { data: session } = useSession();
-  const [formValues, setFormValues] = useState({
+  const [formValues] = useState({
     first_name: '',
     name: '',
     address: '',
@@ -35,34 +36,38 @@ const Module = () => {
 
   const [bufferedValues, setBufferedValues] = useState(formValues);
   const [stableFormValues, setStableFormValues] = useState(formValues);
+  const [loading, setLoading] = useState(true);
+
+  const fetchUserData = useCallback(async () => {
+    try {
+      const response = await apiClient.get(
+        `/api/user/retrieve/${session.user.uid}`,
+        session.accessToken,
+      );
+      const userData = response;
+      setBufferedValues((prevValues) => ({
+        ...prevValues,
+        first_name: userData.first_name,
+        name: userData.name,
+        address: userData.address,
+        postal_code: userData.postal_code,
+        city: userData.city,
+        siren: userData.siren,
+        bic: userData.bic,
+        iban: userData.iban,
+      }));
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [session, setBufferedValues]);
 
   useEffect(() => {
     if (session) {
-      const fetchUserData = async () => {
-        try {
-          const response = await apiClient.get(
-            `/api/user/retrieve/${session.user.uid}`,
-            session.accessToken,
-          );
-          const userData = response;
-          setBufferedValues((prevValues) => ({
-            ...prevValues,
-            first_name: userData.first_name,
-            name: userData.name,
-            address: userData.address,
-            postal_code: userData.postal_code,
-            city: userData.city,
-            siren: userData.siren,
-            bic: userData.bic,
-            iban: userData.iban,
-          }));
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      };
       fetchUserData();
     }
-  }, [session, setFormValues]);
+  }, [session, fetchUserData]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -145,6 +150,8 @@ const Module = () => {
     () => <PDFDocument formValues={stableFormValues} />,
     [stableFormValues],
   );
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <div className="flex flex-col md:flex-row justify-between gap-8">

@@ -8,13 +8,17 @@ import apiClient from '../../../utils/apiClient';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import LoadingScreen from '../../../components/Shared/LoadingScreen';
 
 const InvoicesPage = () => {
   const { data: session, status } = useSession();
   const [invoices, setInvoices] = useState([]);
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   const fetchInvoices = useCallback(async () => {
+    if (!session?.accessToken) return;
+
     try {
       const response = await apiClient.get(
         '/api/invoice/list/',
@@ -23,20 +27,23 @@ const InvoicesPage = () => {
       setInvoices(response);
     } catch (error) {
       console.error('Failed to fetch invoices:', error);
+    } finally {
+      setLoading(false);
     }
-  }, [session?.accessToken, setInvoices]);
+  }, [session]);
 
   useEffect(() => {
     if (status === 'authenticated') {
       fetchInvoices();
     }
-  }, [session, fetchInvoices, status]);
+  }, [fetchInvoices, status]);
 
   const handleView = (invoiceId) => {
     router.push(`/modules/invoice/edit/${invoiceId}/`);
   };
 
   const handleDelete = async (invoiceId) => {
+    setLoading(true);
     try {
       await apiClient.delete(
         `/api/invoice/delete/${invoiceId}/`,
@@ -45,12 +52,17 @@ const InvoicesPage = () => {
       setInvoices(invoices.filter((invoice) => invoice.uid !== invoiceId));
     } catch (error) {
       console.error('Failed to delete invoice:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handlePaidChange = async (invoiceId, paid) => {
+    setLoading(true);
     try {
       const invoice = invoices.find((inv) => inv.uid === invoiceId);
+
+      if (!invoice) return;
 
       await apiClient.put(
         `/api/invoice/update/${invoiceId}/`,
@@ -75,8 +87,12 @@ const InvoicesPage = () => {
       );
     } catch (error) {
       console.error('Failed to update invoice:', error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <div>
