@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
-export default function WelcomePage() {
+const WelcomePage = () => {
   const t = useTranslations('WelcomePage');
 
   return (
@@ -13,4 +13,6 @@ export default function WelcomePage() {
       <Link href="/login">{t('signIn')}</Link>
     </div>
   );
-}
+};
+
+export default WelcomePage;

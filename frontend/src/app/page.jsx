@@ -5,7 +5,7 @@
 // import { useTranslations } from 'next-intl';
 import ModuleCard from '../components/Modules/ModuleCard';
 
-export default function Home() {
+const Home = () => {
   // const t = useTranslations('HomePage');
   const modules = [
     {
@@ -43,4 +43,6 @@ export default function Home() {
       </div>
     </main>
   );
-}
+};
+
+export default Home;
