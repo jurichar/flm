@@ -31,10 +31,10 @@ const handler = NextAuth({
           );
 
           const data = await res.json();
-
+          console.log('data', data);
           if (res.ok && data) {
             const decoded = jwtDecode(data.access);
-            console.log('decoded:', decoded);
+            console.log('decoded', data.refresh);
             return {
               accessToken: data.access,
               refreshToken: data.refresh,
@@ -66,6 +66,7 @@ const handler = NextAuth({
         return token;
       }
 
+      console.log('refresh token', token.refreshToken);
       return refreshAccessToken(token.refreshToken).then((data) => {
         return {
           ...token,

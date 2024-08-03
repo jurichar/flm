@@ -80,29 +80,29 @@ const InvoicesPage = () => {
 
   return (
     <div>
-      <Card className="!rounded-xl p-4">
+      <Card className="!rounded-xl p-4 mb-4">
         <table className="w-full divide-y divide-gray-200 !rounded">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Invoice Number
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Client Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Total HT
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Total TVA
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Total TTC
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Created At
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Paid
               </th>
             </tr>
@@ -110,25 +110,25 @@ const InvoicesPage = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {invoices.map((invoice) => (
               <tr key={invoice.uid}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <td className="px-2 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {invoice.invoice_number}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-2 py-4 whitespace-nowrap text-sm text-gray-500">
                   {invoice.client_name}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-2 py-4 whitespace-nowrap text-sm text-gray-500">
                   {invoice.total_ht}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-2 py-4 whitespace-nowrap text-sm text-gray-500">
                   {invoice.total_tva}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-2 py-4 whitespace-nowrap text-sm text-gray-500">
                   {invoice.total_ttc}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-2 py-4 whitespace-nowrap text-sm text-gray-500">
                   {new Date(invoice.created_at).toLocaleDateString()}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-2 py-4 whitespace-nowrap text-sm text-gray-500">
                   <Checkbox
                     checked={invoice.paid}
                     onChange={(e) =>

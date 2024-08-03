@@ -5,12 +5,14 @@ import { jwtDecode } from 'jwt-decode';
 const API_BASE_URL = 'http://localhost:8000';
 
 export const refreshAccessToken = async (refreshToken) => {
+  console.log('refreshAccessToken', refreshToken);
   const response = await fetch(`${API_BASE_URL}/api/token/refresh/`, {
     method: 'POST',
+    body: JSON.stringify({ refresh: refreshToken }),
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ refresh: refreshToken }),
   });
 
   if (!response.ok) {
@@ -33,11 +35,16 @@ const fetchWithAuth = async (url, token, options = {}) => {
 
   let currentToken = token;
   const decodedToken = jwtDecode(token);
+
+  // Vérifiez si le jeton est expiré
   if (Date.now() >= decodedToken.exp * 1000) {
-    const refreshedTokenData = await refreshAccessToken(
-      decodedToken.refreshToken,
-    );
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+    const refreshedTokenData = await refreshAccessToken(refreshToken);
     currentToken = refreshedTokenData.access;
+    localStorage.setItem('accessToken', currentToken);
   }
 
   const headers = {
