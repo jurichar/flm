@@ -49,7 +49,7 @@ const PDFDocument = ({ formValues }) => {
         <View style={styles.addressContainer}>
           <View style={styles.section}>
             <Text style={[styles.text, { fontWeight: 'bold' }]}>
-              MONSIEUR {formValues.first_name} {formValues.name}
+              MONSIEUR {formValues.first_name} {formValues.last_name}
             </Text>
             <Text style={styles.text}>{formValues.address}</Text>
             <Text style={styles.text}>
@@ -61,7 +61,16 @@ const PDFDocument = ({ formValues }) => {
             <Text style={[styles.text, { fontWeight: 'bold' }]}>
               ENTREPRISE {formValues.client_name}
             </Text>
-            <Text style={styles.text}>{formValues.client_address}</Text>
+            <Text style={styles.text}>
+              {formValues.client_address.split(',').map((part, index) => (
+                <Text key={index}>
+                  {part.trim()}
+                  {index < formValues.client_address.split(',').length - 1
+                    ? '\n'
+                    : null}
+                </Text>
+              ))}
+            </Text>
             <Text style={styles.text}>
               {formValues.client_postal_code} {formValues.client_city}
             </Text>
@@ -189,7 +198,7 @@ const PDFDocument = ({ formValues }) => {
           >
             <Text style={styles.text}>Libelle:</Text>
             <Text style={styles.text}>
-              {formValues.invoiceNumber}
+              {formValues.invoice_number}
               {libelleDate}
             </Text>
           </View>

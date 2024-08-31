@@ -89,6 +89,14 @@ export const apiClient = {
       credentials: 'include',
       headers: { 'Content-Type': 'application/json', ...options.headers },
     }),
+  patch: (url, body, token, options = {}) =>
+    fetchWithAuth(url, token, {
+      ...options,
+      method: 'PATCH',
+      body: JSON.stringify(body),
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+    }),
   delete: (url, token, options = {}) =>
     fetchWithAuth(url, token, {
       ...options,
