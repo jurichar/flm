@@ -78,3 +78,21 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f"Invoice {self.invoice_number} - {self.client.name}"
+
+
+class Estimate(models.Model):
+    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    client = models.ForeignKey(
+        Client, on_delete=models.CASCADE, related_name="estimates"
+    )
+    estimate_number = models.CharField(max_length=255, unique=True)
+    tva = models.DecimalField(max_digits=5, decimal_places=2)
+    total_ht = models.DecimalField(max_digits=10, decimal_places=2)
+    total_tva = models.DecimalField(max_digits=10, decimal_places=2)
+    total_ttc = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    items = JSONField(default=list)
+    accepted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Estimate {self.estimate_number} - {self.client.name}"
