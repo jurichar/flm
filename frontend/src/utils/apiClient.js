@@ -2,7 +2,7 @@
 
 import { jwtDecode } from 'jwt-decode';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const refreshAccessToken = async (refreshToken) => {
   console.log('refreshAccessToken', refreshToken);
@@ -29,6 +29,7 @@ export const refreshAccessToken = async (refreshToken) => {
 
 const fetchWithAuth = async (url, token, options = {}) => {
   console.log('fetchWithAuth', url, token, options);
+  console.log('API BASE :', API_BASE_URL);
   if (!token) {
     throw new Error('Authorization token is required');
   }
@@ -36,7 +37,6 @@ const fetchWithAuth = async (url, token, options = {}) => {
   let currentToken = token;
   const decodedToken = jwtDecode(token);
 
-  // Vérifiez si le jeton est expiré
   if (Date.now() >= decodedToken.exp * 1000) {
     const refreshToken = localStorage.getItem('refreshToken');
     if (!refreshToken) {

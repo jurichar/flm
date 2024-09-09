@@ -33,8 +33,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, login, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
         return self.create_user(login, password, **extra_fields)
 
 
@@ -50,8 +48,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     siren = models.CharField(max_length=9, blank=True, null=True)
     bic = models.CharField(max_length=11, blank=True, null=True)
     iban = models.CharField(max_length=34, blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
 

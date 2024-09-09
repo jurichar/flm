@@ -44,8 +44,9 @@ const UserProfile = () => {
           `/api/user/retrieve/${session.user.uid}/`,
           session.accessToken,
         );
+        console.log(response);
         setUserProfile({
-          name: response.name,
+          last_name: response.last_name,
           first_name: response.first_name,
           address: response.address,
           postal_code: response.postal_code,
@@ -70,20 +71,20 @@ const UserProfile = () => {
         <h2 className=" text-2xl">User Profile</h2>
         <form className="flex flex-col gap-4">
           <Input
-            name="name"
-            onChange={handleInputChange}
-            placeholder="Last name"
-            size="lg"
-            type="text"
-            value={userProfile.name || ''}
-          />
-          <Input
             name="first_name"
             onChange={handleInputChange}
             placeholder="First name"
             size="lg"
             type="text"
             value={userProfile.first_name || ''}
+          />
+          <Input
+            name="name"
+            onChange={handleInputChange}
+            placeholder="Last name"
+            size="lg"
+            type="text"
+            value={userProfile.last_name || ''}
           />
           <Input
             name="address"
