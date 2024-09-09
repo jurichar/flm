@@ -7,7 +7,6 @@ app_models = apps.get_app_config("main").get_models()
 from django.contrib.auth.admin import UserAdmin
 
 
-# Fonction pour créer une classe ModelAdmin pour chaque modèle
 def create_model_admin(model):
     class MetaModelAdmin(admin.ModelAdmin):
         list_display = [field.name for field in model._meta.fields]
@@ -15,7 +14,6 @@ def create_model_admin(model):
     return MetaModelAdmin
 
 
-# Enregistrez chaque modèle avec sa classe ModelAdmin correspondante
 for model in app_models:
     if model.__name__ == "User":
         continue
@@ -23,10 +21,7 @@ for model in app_models:
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = (
-        "login",
-        "is_staff",
-    )
+    list_display = ("login",)
     ordering = ("login",)
 
     fieldsets = (
@@ -35,8 +30,8 @@ class CustomUserAdmin(UserAdmin):
             "Personal info",
             {
                 "fields": (
-                    "name",
                     "first_name",
+                    "last_name",
                     "address",
                     "postal_code",
                     "city",
@@ -44,18 +39,6 @@ class CustomUserAdmin(UserAdmin):
                     "bic",
                     "iban",
                     "email",
-                )
-            },
-        ),
-        (
-            "Permissions",
-            {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                    "groups",
-                    "user_permissions",
                 )
             },
         ),
@@ -72,7 +55,8 @@ class CustomUserAdmin(UserAdmin):
         ),
     )
 
-    search_fields = ("login", "email", "name", "first_name")
+    search_fields = ("login", "email", "last_name", "first_name")
+    list_filter = ()
 
 
 admin.site.register(User, CustomUserAdmin)

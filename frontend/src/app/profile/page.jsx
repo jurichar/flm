@@ -10,7 +10,7 @@ import apiClient from '../../utils/apiClient';
 const UserProfile = () => {
   const { data: session } = useSession();
   const [userProfile, setUserProfile] = useState({
-    name: '',
+    last_name: '',
     first_name: '',
     address: '',
     postal_code: '',
@@ -44,7 +44,6 @@ const UserProfile = () => {
           `/api/user/retrieve/${session.user.uid}/`,
           session.accessToken,
         );
-        console.log(response);
         setUserProfile({
           last_name: response.last_name,
           first_name: response.first_name,
@@ -79,7 +78,7 @@ const UserProfile = () => {
             value={userProfile.first_name || ''}
           />
           <Input
-            name="name"
+            name="last_name"
             onChange={handleInputChange}
             placeholder="Last name"
             size="lg"

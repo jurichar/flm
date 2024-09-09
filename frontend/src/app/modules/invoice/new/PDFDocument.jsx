@@ -49,7 +49,7 @@ const PDFDocument = ({ formValues }) => {
         <View style={styles.addressContainer}>
           <View style={styles.section}>
             <Text style={[styles.text, { fontWeight: 'bold' }]}>
-              MONSIEUR {formValues.first_name} {formValues.name}
+              MONSIEUR {formValues.first_name} {formValues.last_name}
             </Text>
             <Text style={styles.text}>{formValues.address}</Text>
             <Text style={styles.text}>

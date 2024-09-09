@@ -58,6 +58,10 @@ const fetchWithAuth = async (url, token, options = {}) => {
     headers,
   });
 
+  if (options.responseType === 'blob') {
+    return response.blob();
+  }
+
   if (!response.ok) {
     console.error('Failed to fetch:', response.status, response.statusText);
     throw new Error('Network response was not ok');

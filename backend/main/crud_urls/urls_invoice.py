@@ -23,4 +23,9 @@ urlpatterns = [
         api_views.RetrieveInvoiceAPIView.as_view(),
         name="retrieve-invoice",
     ),
+    path(
+        "pdf/<uuid:invoice_uid>/",
+        api_views.GenerateInvoicePDFView.as_view(),
+        name="generate-invoice-pdf",
+    ),
 ]

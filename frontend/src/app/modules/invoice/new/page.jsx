@@ -2,40 +2,14 @@
 
 'use client';
 
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
-import FormInputs from './FormInputs';
-import PDFDocument from './PDFDocument';
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Button } from '@material-tailwind/react';
 import apiClient from '../../../../utils/apiClient';
 import LoadingScreen from '../../../../components/Shared/LoadingScreen';
 
 const Module = () => {
   const { data: session } = useSession();
-  const [formValues] = useState({
-    first_name: '',
-    name: '',
-    address: '',
-    postal_code: '',
-    city: '',
-    siren: '',
-    bic: '',
-    iban: '',
-    invoiceNumber: 1,
-    clientName: '',
-    clientAddress: '',
-    clientPostalCode: '',
-    clientCity: '',
-    TVA: 0,
-    totalHT: 0.0,
-    totalTVA: 0.0,
-    totalTTC: 0.0,
-    items: [],
-  });
-
-  const [bufferedValues, setBufferedValues] = useState(formValues);
-  const [stableFormValues, setStableFormValues] = useState(formValues);
   const [loading, setLoading] = useState(true);
 
   const fetchUserData = useCallback(async () => {
@@ -45,23 +19,13 @@ const Module = () => {
         session.accessToken,
       );
       const userData = response;
-      setBufferedValues((prevValues) => ({
-        ...prevValues,
-        first_name: userData.first_name,
-        name: userData.name,
-        address: userData.address,
-        postal_code: userData.postal_code,
-        city: userData.city,
-        siren: userData.siren,
-        bic: userData.bic,
-        iban: userData.iban,
-      }));
+      console.log('User data:', userData);
     } catch (error) {
       console.error('Error fetching user data:', error);
     } finally {
       setLoading(false);
     }
-  }, [session, setBufferedValues]);
+  }, [session]);
 
   useEffect(() => {
     if (session) {
@@ -69,112 +33,47 @@ const Module = () => {
     }
   }, [session, fetchUserData]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setStableFormValues(bufferedValues);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [bufferedValues]);
-
-  const handleInputChange = (newValues) => {
-    newValues.totalHT = newValues.items
-      .reduce(
-        (sum, item) =>
-          sum +
-          parseFloat(item.unitPrice || 0) * parseFloat(item.quantity || 1),
-        0,
-      )
-      .toFixed(2);
-    newValues.totalTVA = newValues.items
-      .reduce(
-        (sum, item) =>
-          sum +
-          (parseFloat(newValues.TVA || 0) / 100) *
-            parseFloat(item.unitPrice || 0) *
-            parseFloat(item.quantity || 1),
-        0,
-      )
-      .toFixed(2);
-    newValues.totalTTC = (
-      parseFloat(newValues.totalHT) + parseFloat(newValues.totalTVA)
-    ).toFixed(2);
-    setBufferedValues({ ...newValues });
+  const handleDownloadPDF = async (invoiceId) => {
+    try {
+      const response = await apiClient.get(
+        `/api/invoice/pdf/${invoiceId}`,
+        session.accessToken,
+        {
+          responseType: 'blob',
+        },
+      );
+      const blob = await response;
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `invoice_${invoiceId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error('Failed to download PDF', error);
+    }
   };
 
   const handleSaveInvoice = async () => {
     try {
-      const itemsToSave = stableFormValues.items.map((item) => ({
-        name: item.name,
-        details: item.details,
-        quantity: item.quantity,
-        unitPrice: item.unitPrice,
-        total: item.total,
-      }));
-
-      const invoiceData = {
-        user: session.user.uid,
-        first_name: stableFormValues.first_name,
-        last_name: stableFormValues.name,
-        address: stableFormValues.address,
-        postal_code: stableFormValues.postal_code,
-        city: stableFormValues.city,
-        siren: stableFormValues.siren,
-        bic: stableFormValues.bic,
-        iban: stableFormValues.iban,
-        invoice_number: stableFormValues.invoiceNumber,
-        client_name: stableFormValues.clientName,
-        client_address: stableFormValues.clientAddress,
-        client_postal_code: stableFormValues.clientPostalCode,
-        client_city: stableFormValues.clientCity,
-        tva: stableFormValues.TVA,
-        total_ht: stableFormValues.totalHT,
-        total_tva: stableFormValues.totalTVA,
-        total_ttc: stableFormValues.totalTTC,
-        items: itemsToSave,
-      };
-
-      const response = await apiClient.post(
-        '/api/invoice/create/',
-        invoiceData,
-        session.accessToken,
-      );
-      alert('Invoice saved successfully');
-      console.log('Invoice saved:', response);
+      const invoiceId = '8d02fbe2-e199-4a6d-a16f-1e38c2f46e28';
+      handleDownloadPDF(invoiceId);
     } catch (error) {
       console.error('Error saving invoice:', error);
       alert('Failed to save invoice');
     }
   };
 
-  const memoizedPDFDocument = useMemo(
-    () => <PDFDocument formValues={stableFormValues} />,
-    [stableFormValues],
-  );
-
   if (loading) return <LoadingScreen />;
 
   return (
     <div className="flex flex-col md:flex-row justify-between gap-8">
       <div className="min-w-2/5 p-1">
-        <FormInputs
-          formValues={bufferedValues}
-          onInputChange={handleInputChange}
-        />
-        <PDFDownloadLink document={memoizedPDFDocument} fileName="invoice">
-          <Button className="w-full mt-2">Download PDF</Button>
-        </PDFDownloadLink>
         <Button className="w-full mt-2" onClick={handleSaveInvoice}>
-          Save Invoice
+          Save Invoice & Download PDF
         </Button>
       </div>
-      <PDFViewer
-        className="sticky top-4 w-full"
-        height="700"
-        showToolbar="false"
-        width="full"
-      >
-        {memoizedPDFDocument}
-      </PDFViewer>
     </div>
   );
 };

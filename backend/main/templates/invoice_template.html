@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Facture</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      color: #63717d;
+    }
+
+    .invoice-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .address-section {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .section {
+      margin-bottom: 10px;
+    }
+
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 12px;
+    }
+
+    .table th,
+    .table td {
+      border-top: 1px solid;
+      border-bottom: 1px solid;
+      padding: 8px;
+    }
+
+    .table th {
+      background-color: #efefef;
+    }
+
+    .summary {
+      margin-top: 30px;
+      text-align: right;
+    }
+
+    .summary p {
+      margin: 5px 0;
+    }
+
+    .payment-info {
+      margin-top: 30px;
+    }
+
+    .payment-info span {
+      font-size: 12px;
+    }
+
+
+    .footer {
+      margin-top: 50px;
+      margin-left: 30px;
+      margin-right: 30px;
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Invoice Header -->
+  <div>
+    <h1>FACTURE</h1>
+  </div>
+
+  <!-- Client and Vendor Information -->
+  <div class="address-section">
+    <div class="section">
+      <p class="bold">MONSIEUR {{ invoice.user.first_name }} {{ invoice.user.last_name }}</p>
+      <p>{{ invoice.user.address }}</p>
+      <p>{{ invoice.user.postal_code }}</p>
+      <p>{{ invoice.user.city }}</p>
+    </div>
+    <div class="section">
+      <p class="bold">{{ invoice.client.name }}</p>
+      <p>{{ invoice.client.address }}</p>
+      <p>{{ invoice.client.postal_code }}</p>
+      <p> {{ invoice.client.city }}</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <p>Facture numéro {{ invoice.invoice_number }}</p>
+    <p>Date d'émission : {{ invoice.created_at|date:"d/m/Y" }}</p>
+    <p>Date limite de paiement : {{ invoice.payment_due_date|date:"d/m/Y" }}</p>
+  </div>
+
+  <!-- Invoice Items Table -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Quantité</th>
+        <th>Prix Unitaire</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in invoice.items %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.unit_price }} €</td>
+        <td>{{ item.total }} €</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="summary">
+    <p>Total HT: {{ invoice.total_ht }} €</p>
+    <p>TVA ({{ invoice.tva }}%): {{ invoice.total_tva }} €</p>
+    <p class="bold">Total TTC: {{ invoice.total_ttc }} €</p>
+  </div>
+
+  <div class="payment-info">
+    <h3>Informations de paiement :</h3>
+    <p>BIC: {{ invoice.user.bic }}</p>
+    <p>IBAN: {{ invoice.user.iban }}</p>
+    <p>Libellé: {{ invoice.invoice_number }}{{ invoice.created_at|date:"dmY" }}</p>
+    <span>A utiliser comme libelle lors de votre virement pour identifier la
+      transaction</span>
+  </div>
+
+  <div class="footer">
+    <p>
+      MONSIEUR {{ invoice.user.first_name }} {{ invoice.user.last_name }} vous a envoyé cette facture le {{
+      invoice.created_at|date:"d/m/Y" }}.
+    </p>
+    <p>
+      Cette facture doit être réglée sous 15 jours à compter de la date d'émission. Passé ce délai, une pénalité de
+      retard de 3 % sera appliquée, ainsi qu'une indemnité forfaitaire de 40 € due au titre des frais de recouvrement.
+      Pas d'escompte pour règlement anticipé.
+    </p>
+  </div>
+
+</body>
+
+</html>
