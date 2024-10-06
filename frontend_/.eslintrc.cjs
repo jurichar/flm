@@ -2,22 +2,31 @@ module.exports = {
   root: true,
   env: { browser: true, es2020: true },
   extends: [
+    'next',
+    'next/core-web-vitals',
+    'plugin:prettier/recommended',
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/tsx-runtime',
     'plugin:react-hooks/recommended',
-    'plugin:prettier/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
+  parserOptions: {
+    babelOptions: {
+      presets: [require.resolve('next/babel')],
+    },
+  },
   settings: { react: { version: 'detect' } },
-  plugins: ['react-refresh'],
   rules: {
+<<<<<<< HEAD:frontend_/.eslintrc.cjs
     'react/tsx-no-target-blank': 'off',
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
     ],
+=======
+    'react/jsx-no-target-blank': 'off',
+>>>>>>> react:frontend/.eslintrc.cjs
     'react/prefer-stateless-function': 'error',
     'react/button-has-type': 'error',
     'react/no-unused-prop-types': 'error',

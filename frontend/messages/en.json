@@ -12,7 +12,13 @@
     "en": "English",
     "label": "Language"
   },
+<<<<<<< HEAD
   "LoginPage": {
+=======
+  "login": {
+    "welcome": "Welcome",
+    "signIn": "Sign in",
+>>>>>>> react
     "credentials": "Credentials: jane@doe.com / next-intl",
     "description": "Please enter your details.",
     "email": "Email",
@@ -21,7 +27,12 @@
     "invalidPassword": "Please enter a password.",
     "login": "Sign in",
     "password": "Password",
+<<<<<<< HEAD
     "title": "Welcome back"
+=======
+    "title": "Welcome back",
+    "username": "Username"
+>>>>>>> react
   },
   "ProfilePage": {
     "title": "Profile"

@@ -1,52 +1,48 @@
+# docker-compose.yaml
 services:
   db:
     container_name: postgres
     image: postgres:16.1
     ports:
       - '5432:5432'
-
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
-
     volumes:
       - ./data/db:/var/lib/postgresql/data/
 
-  frontend:
+  backend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
-
-    environment:
-      - FONTAWESOME_PACKAGE_TOKEN=${FONTAWESOME_PACKAGE_TOKEN}
-
-    ports:
-      - '3000:3000'
-
-    volumes:
-      - ./frontend:/app/frontend
-      - /app/frontend/node_modules
-
-    depends_on:
-      - backend
-
-  backend: 
-    build: 
       context: ./backend
       dockerfile: Dockerfile
-
+    # command: python manage.py runserver 0.0.0.0:8000
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
       - DOCKER_ENV=true
-
     ports:
       - '8000:8000'
-
     volumes:
       - ./backend:/app/backend
-
     depends_on:
       - db
+    tty: true
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXT_PUBLIC_API_BASE_URL=http://backend:8000
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    depends_on:
+      - backend
+    tty: true
