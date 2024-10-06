@@ -38,7 +38,7 @@ const NavList = () => {
         variant="small"
       >
         <Button
-          className="flex items-center hover:text-blue-500 transition-colors"
+          className="flex items-center transition-colors"
           onClick={() => signOut()}
         >
           <FontAwesomeIcon icon={faRightFromBracket} />
@@ -68,43 +68,49 @@ const NavbarSimple = () => {
 
   return (
     status === 'authenticated' && (
-      <Navbar className="min-w-full px-6 py-3 mb-4">
-        <div className="flex items-center justify-between text-blue-gray-900">
-          <div className="flex">
-            <Typography
-              as={Link}
-              className="mr-4 cursor-pointer py-1.5 text-md"
-              href="/"
+      <>
+        <Navbar
+          className="min-w-full py-3 mb-4 rounded-none sticky top-0 z-50 bg-blue-300"
+          shadow={false}
+        >
+          <div className="flex items-center justify-between text-blue-gray-900">
+            <div className="flex">
+              <Typography
+                as={Link}
+                className="mr-4 cursor-pointer py-1.5 text-md"
+                href="/"
+              >
+                MyFree
+              </Typography>
+              <Typography
+                as={Link}
+                className="border-black border-l-2 px-4 cursor-pointer py-1.5 text-md"
+                href="/profile"
+              >
+                Hello {session ? session.user.login : 'Guest'}
+              </Typography>
+            </div>
+            <div className="hidden lg:block">
+              <NavList />
+            </div>
+            <IconButton
+              className="text-xl ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+              onClick={() => setOpenNav(!openNav)}
+              variant="text"
             >
-              MyFree
-            </Typography>
-            <Typography
-              as={Link}
-              className="border-black border-l-2 px-4 cursor-pointer py-1.5 text-md"
-              href="/profile"
-            >
-              Hello {session ? session.user.login : 'Guest'}
-            </Typography>
+              {openNav ? (
+                <FontAwesomeIcon icon={faXmark} />
+              ) : (
+                <FontAwesomeIcon icon={faBars} />
+              )}
+            </IconButton>
           </div>
-          <div className="hidden lg:block">
+          <Collapse open={openNav}>
             <NavList />
-          </div>
-          <IconButton
-            className="text-xl ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
-            onClick={() => setOpenNav(!openNav)}
-            variant="text"
-          >
-            {openNav ? (
-              <FontAwesomeIcon icon={faXmark} />
-            ) : (
-              <FontAwesomeIcon icon={faBars} />
-            )}
-          </IconButton>
-        </div>
-        <Collapse open={openNav}>
-          <NavList />
-        </Collapse>
-      </Navbar>
+          </Collapse>
+        </Navbar>
+        <div className="h-10 w-full bg-blue-500" />
+      </>
     )
   );
 };
