@@ -33,8 +33,15 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, login, password=None, **extra_fields):
-        return self.create_user(login, password, **extra_fields)
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
 
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(login, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -48,6 +55,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     siren = models.CharField(max_length=9, blank=True, null=True)
     bic = models.CharField(max_length=11, blank=True, null=True)
     iban = models.CharField(max_length=34, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
 
