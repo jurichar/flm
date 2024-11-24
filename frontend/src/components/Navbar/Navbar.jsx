@@ -20,9 +20,28 @@ import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import LocaleSwitcher from '../Shared/LocaleSwitcher';
 
+
 const NavList = () => {
+  const modules = [
+    { name: 'Calculator', link: '/modules/calculator' },
+    { name: 'Invoice', link: '/modules/invoice' },
+    { name: 'Estimate', link: '/modules/estimate' },
+    { name: 'Estimate Generator', link: '/modules/estimateGenerator' },
+  ];
+
   return (
     <ul className="my-2 flex items-end flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+      {modules.map((module) => (
+        <Typography
+          key={module.name}
+          as={Link}
+          href={module.link}
+          className="p-1 font-medium text-blue-gray-900 hover:underline"
+          variant="small"
+        >
+          {module.name}
+        </Typography>
+      ))}
       <Typography
         as="li"
         className="p-1 font-medium"
@@ -68,49 +87,46 @@ const NavbarSimple = () => {
 
   return (
     status === 'authenticated' && (
-      <>
-        <Navbar
-          className="min-w-full py-3 mb-4 rounded-none sticky top-0 z-50 bg-blue-300"
-          shadow={false}
-        >
-          <div className="flex items-center justify-between text-blue-gray-900">
-            <div className="flex">
-              <Typography
-                as={Link}
-                className="mr-4 cursor-pointer py-1.5 text-md"
-                href="/"
-              >
-                MyFree
-              </Typography>
-              <Typography
-                as={Link}
-                className="border-black border-l-2 px-4 cursor-pointer py-1.5 text-md"
-                href="/profile"
-              >
-                Hello {session ? session.user.login : 'Guest'}
-              </Typography>
-            </div>
-            <div className="hidden lg:block">
-              <NavList />
-            </div>
-            <IconButton
-              className="text-xl ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
-              onClick={() => setOpenNav(!openNav)}
-              variant="text"
+      <Navbar
+        className="min-w-full py-3 mb-4 rounded-none sticky top-0 z-50 bg-blue-300"
+        shadow={false}
+      >
+        <div className="flex items-center justify-between text-blue-gray-900">
+          <div className="flex">
+            <Typography
+              as={Link}
+              className="mr-4 cursor-pointer py-1.5 text-md"
+              href="/"
             >
-              {openNav ? (
-                <FontAwesomeIcon icon={faXmark} />
-              ) : (
-                <FontAwesomeIcon icon={faBars} />
-              )}
-            </IconButton>
+              MyFree
+            </Typography>
+            <Typography
+              as={Link}
+              className="border-black border-l-2 px-4 cursor-pointer py-1.5 text-md"
+              href="/profile"
+            >
+              Hello {session ? session.user.login : 'Guest'}
+            </Typography>
           </div>
-          <Collapse open={openNav}>
+          <div className="hidden lg:block">
             <NavList />
-          </Collapse>
-        </Navbar>
-        <div className="h-10 w-full bg-blue-500" />
-      </>
+          </div>
+          <IconButton
+            className="text-xl ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+            onClick={() => setOpenNav(!openNav)}
+            variant="text"
+          >
+            {openNav ? (
+              <FontAwesomeIcon icon={faXmark} />
+            ) : (
+              <FontAwesomeIcon icon={faBars} />
+            )}
+          </IconButton>
+        </div>
+        <Collapse open={openNav}>
+          <NavList />
+        </Collapse>
+      </Navbar>
     )
   );
 };
