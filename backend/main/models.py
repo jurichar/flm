@@ -7,22 +7,6 @@ from django.contrib.auth.models import (
 )
 from django.db.models import JSONField
 
-
-class Client(models.Model):
-    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=255, unique=True)
-    address = models.CharField(max_length=255)
-    postal_code = models.CharField(max_length=10)
-    city = models.CharField(max_length=100)
-    siren = models.CharField(max_length=9, blank=True, null=True)
-    bic = models.CharField(max_length=11, blank=True, null=True)
-    iban = models.CharField(max_length=34, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-
 class UserManager(BaseUserManager):
     def create_user(self, login, password=None, **extra_fields):
         if not login:
@@ -66,7 +50,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.login
 
+class Client(models.Model):
+    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255, unique=True)
+    address = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=10)
+    city = models.CharField(max_length=100)
+    siren = models.CharField(max_length=9, blank=True, null=True)
+    bic = models.CharField(max_length=11, blank=True, null=True)
+    iban = models.CharField(max_length=34, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
 
+    def __str__(self):
+        return self.name
 class Invoice(models.Model):
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     client = models.ForeignKey(
