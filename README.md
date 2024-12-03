@@ -1,4 +1,4 @@
-# Getting Started with FML
+# Getting Started with company admin tool
 
 fml is a full-stack application designed to manage and visualize performance metrics. The project utilizes Django for the backend, React for the frontend, TailwindCSS for styling, and Docker for containerization.
 
